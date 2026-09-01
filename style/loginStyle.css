@@ -1,0 +1,179 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+/* Card central do Login */
+.card-login {
+    width: 100%;
+    max-width: 380px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+/* Barra superior cinza (Acessibilidade) */
+.top-bar {
+    background-color: #708090;
+    color: #ffffff;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+}
+
+.top-bar-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.2s;
+}
+
+.top-bar-item:hover {
+    opacity: 0.8;
+}
+
+.font-icon {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.contrast-icon {
+    font-size: 14px;
+}
+
+/* Corpo do formulário */
+.form-body {
+    padding: 24px 20px 16px 20px;
+}
+
+/* Padrão estabelecido para os campos */
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.campo label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #000;
+}
+
+.campo input, 
+.campo select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fff;
+    transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+}
+
+.campo input:focus, 
+.campo select:focus {
+    border-color: #0a2540;
+}
+
+/* Estilização específica do botão Fazer Login */
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background-color: #0a2540;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-login:hover {
+    background-color: #14385c;
+}
+
+.btn-login:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
+/* Link de Esqueceu a senha */
+.forgot-password-container {
+    text-align: right;
+    margin-top: 18px;
+}
+
+.forgot-password {
+    color: #708090;
+    font-weight: bold;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Mensagens de validação */
+.mensagem-erro {
+    color: #d9534f;
+    font-size: 12px;
+    margin-bottom: 10px;
+    display: none;
+}
+
+/* --- ESTILOS DE ALTO CONTRASTE --- */
+body.alto-contraste {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+
+body.alto-contraste .card-login {
+    background-color: #121212 !important;
+    border: 2px solid #ffff00 !important;
+    box-shadow: none !important;
+}
+
+body.alto-contraste .top-bar {
+    background-color: #000000 !important;
+    border-bottom: 1px solid #ffff00 !important;
+    color: #ffff00 !important;
+}
+
+body.alto-contraste .campo label,
+body.alto-contraste .forgot-password {
+    color: #ffff00 !important;
+}
+
+body.alto-contraste .campo input {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
+    border-color: #ffff00 !important;
+}
+
+body.alto-contraste .btn-login {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+}
