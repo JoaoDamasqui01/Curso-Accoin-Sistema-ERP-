@@ -1,4 +1,4 @@
-import { connSuba } from '../conexao/Supabase.js';
+import { connSubaBase } from '../conexao/Supabase.js';
 /*
   ============================================
   PEGANDO ELEMENTOS DO HTML
@@ -8,6 +8,9 @@ import { connSuba } from '../conexao/Supabase.js';
 const formCliente = document.getElementById("formCliente");
 const tabelaClientes = document.getElementById("tabelaClientes");
 const mensagem = document.getElementById("mensagem");
+
+const campoPesquisa = document.getElementById("campoPesquisa");
+const btnPesquisar = document.getElementById("btnPesquisar");
 
 const clienteIdInput = document.getElementById("clienteId");
 const tipoClienteInput = document.getElementById("tipoCliente");
@@ -55,29 +58,34 @@ function formatarTipoCliente(tipoCliente) {
   ============================================
 */
 
-async function carregarClientes() {
-  const { data, error } = await connSuba
+/*
+  ============================================
+  CARREGAR CLIENTES (COM PESQUISA)
+  ============================================
+*/
+async function carregarClientes(termoBusca = "") {
+  tabelaClientes.innerHTML = `<tr><td colspan="5">Buscando clientes...</td></tr>`;
+
+  let query = connSubaBase
     .from("CLIENTE")
-    .select("CLIENTEID, TIPO_CLIENTE, CPF_CNPJ_CLIENTE, NOME_CLIENTE")
-    .order("CLIENTEID", { ascending: true });
+    .select("CLIENTEID, TIPO_CLIENTE, CPF_CNPJ_CLIENTE, NOME_CLIENTE");
+
+  // Se houver termo digitado, filtra por NOME ou CPF/CNPJ (case-insensitive)
+  if (termoBusca.trim() !== "") {
+    const termo = `%${termoBusca.trim()}%`;
+    query = query.or(`NOME_CLIENTE.ilike.${termo},CPF_CNPJ_CLIENTE.ilike.${termo}`);
+  }
+
+  const { data, error } = await query.order("CLIENTEID", { ascending: true });
 
   if (error) {
-    tabelaClientes.innerHTML = `
-      <tr>
-        <td colspan="5">Erro ao carregar clientes.</td>
-      </tr>
-    `;
-
+    tabelaClientes.innerHTML = `<tr><td colspan="5">Erro ao carregar clientes.</td></tr>`;
     mostrarMensagem("Erro ao buscar clientes: " + error.message, "erro");
     return;
   }
 
   if (data.length === 0) {
-    tabelaClientes.innerHTML = `
-      <tr>
-        <td colspan="5">Nenhum cliente cadastrado.</td>
-      </tr>
-    `;
+    tabelaClientes.innerHTML = `<tr><td colspan="5">Nenhum cliente encontrado.</td></tr>`;
     return;
   }
 
@@ -88,9 +96,9 @@ async function carregarClientes() {
 
     linha.innerHTML = `
       <td>${cliente.CLIENTEID}</td>
-      <td>${formatarTipoCliente(cliente.TIPO_CLIENTE)}</td>
-      <td>${cliente.CPF_CNPJ_CLIENTE}</td>
       <td>${cliente.NOME_CLIENTE}</td>
+      <td>${cliente.CPF_CNPJ_CLIENTE}</td>
+      <td>${cliente.TIPO_CLIENTE === 'F' ? 'Pessoa Física' : 'Pessoa Jurídica'}</td>
       <td class="coluna-acoes"></td>
     `;
 
@@ -98,7 +106,6 @@ async function carregarClientes() {
     botaoEditar.textContent = "Editar";
     botaoEditar.className = "btn-editar";
     botaoEditar.type = "button";
-
     botaoEditar.addEventListener("click", function() {
       prepararEdicao(cliente);
     });
@@ -107,17 +114,44 @@ async function carregarClientes() {
     botaoExcluir.textContent = "Excluir";
     botaoExcluir.className = "btn-excluir";
     botaoExcluir.type = "button";
-
     botaoExcluir.addEventListener("click", function() {
       excluirCliente(cliente);
     });
 
-    linha.querySelector(".coluna-acoes").appendChild(botaoEditar);
-    linha.querySelector(".coluna-acoes").appendChild(botaoExcluir);
+    const colAcoes = linha.querySelector(".coluna-acoes");
+    colAcoes.appendChild(botaoEditar);
+    colAcoes.appendChild(botaoExcluir);
 
     tabelaClientes.appendChild(linha);
   });
 }
+
+/*
+  ============================================
+  EVENTOS DE PESQUISA
+  ============================================
+*/
+
+// Clique no botão Pesquisar
+btnPesquisar.addEventListener("click", function() {
+  carregarClientes(campoPesquisa.value);
+});
+
+// Tecla Enter no campo de pesquisa
+campoPesquisa.addEventListener("keypress", function(evento) {
+  if (evento.key === "Enter") {
+    evento.preventDefault();
+    carregarClientes(campoPesquisa.value);
+  }
+});
+
+// Pesquisa dinâmica ao digitar
+campoPesquisa.addEventListener("input", function() {
+  carregarClientes(campoPesquisa.value);
+});
+
+// Inicializa a tabela
+carregarClientes();
 
 /*
   ============================================
@@ -178,7 +212,7 @@ async function salvarCliente() {
     NOME_CLIENTE: nomeCliente
   };
 
-  const { error } = await connSuba
+  const { error } = await connSubaBase
     .from("CLIENTE")
     .insert(novoCliente);
 
@@ -202,7 +236,7 @@ async function atualizarNomeCliente() {
   const clienteId = clienteIdInput.value;
   const nomeCliente = nomeClienteInput.value;
 
-  const { error } = await connSuba
+  const { error } = await connSubaBase
     .from("CLIENTE")
     .update({
       NOME_CLIENTE: nomeCliente
@@ -234,7 +268,7 @@ async function excluirCliente(cliente) {
     return;
   }
 
-  const { error } = await connSuba
+  const { error } = await connSubaBase
     .from("CLIENTE")
     .delete()
     .eq("CLIENTEID", cliente.CLIENTEID);

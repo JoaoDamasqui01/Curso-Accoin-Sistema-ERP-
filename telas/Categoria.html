@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style/styleUniversal.css">
+    <link rel="stylesheet" href="../style/universalStyle.css">
     <title>Cadastro de Categoria de Produto</title>
 </head>
 
 <body>
+
+    <menu-page></menu-page>
 
     <main class="container">
         <h1>Cadastro de Categoria de Produto</h1>
@@ -28,6 +30,14 @@
             <div class="campo nome">
                 <label for="obsCategoriaProduto">Observação</label>
                 <input type="text" id="obsCategoriaProduto" maxlength="255" placeholder="Digite uma observação (Obrigatório)" required>
+            </div>
+
+            <div class="campo nome">
+                <label for="campoPesquisa">Pesquisa de Categoria</label>
+                <div class="campoPesquisa">
+                    <input type="text" id="campoPesquisa" maxlength="255" placeholder="Pesquise uma Categoria em especifica">
+                    <button type="submit" id="btnPesquisar" class="btn-pesquisar" value="Pesquisar">Pesquisar</button>
+                </div>
             </div>
 
             <div class="acoes">
@@ -60,6 +70,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="../javascript/Categoria.js"></script>
+    <script src="../componente/menu/menu.js"></script>
 
 </body>
 

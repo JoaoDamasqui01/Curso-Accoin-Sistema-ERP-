@@ -6,13 +6,15 @@
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style/styleUniversal.css">
+    <link rel="stylesheet" href="../style/universalStyle.css">
 
     <!-- Título que aparece na aba do navegador. -->
     <title>Cadastro de Cliente</title>
 </head>
 
 <body>
+
+    <menu-page></menu-page>
 
     <!-- Conteúdo principal da página -->
     <main class="container">
@@ -44,6 +46,13 @@
                 </select>
             </div>
 
+            <!-- Campo NOME_CLIENTE.
+           Na tabela é VARCHAR(100), então usamos maxlength="100". -->
+            <div class="campo">
+                <label for="nomeCliente">Nome do Cliente</label>
+                <input type="text" id="nomeCliente" maxlength="100" placeholder="Digite o nome do cliente" required>
+            </div>
+
             <!-- Campo CPF_CNPJ_CLIENTE.
            Na tabela é VARCHAR(18), então usamos maxlength="18". -->
             <div class="campo">
@@ -51,11 +60,13 @@
                 <input type="text" id="cpfCnpjCliente" maxlength="18" placeholder="Digite o CPF ou CNPJ" required>
             </div>
 
-            <!-- Campo NOME_CLIENTE.
-           Na tabela é VARCHAR(100), então usamos maxlength="100". -->
+
             <div class="campo nome">
-                <label for="nomeCliente">Nome do Cliente</label>
-                <input type="text" id="nomeCliente" maxlength="100" placeholder="Digite o nome do cliente" required>
+                <label for="campoPesquisa">Pesquisa de Cliente</label>
+                <div class="campoPesquisa">
+                    <input type="text" id="campoPesquisa" maxlength="100" placeholder="Pesquise por Nome ou CPF/CNPJ">
+                    <button type="button" id="btnPesquisar" class="btn-pesquisar">Pesquisar</button>
+                </div>
             </div>
 
             <!-- Botões do formulário -->
@@ -95,9 +106,9 @@
             <thead>
                 <tr>
                     <th>Código</th>
-                    <th>Tipo</th>
-                    <th>CPF / CNPJ</th>
                     <th>Nome</th>
+                    <th>CPF / CNPJ</th>
+                    <th>Tipo</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -118,6 +129,7 @@
 
     <!-- Nosso arquivo JavaScript separado -->
     <script type="module" src="../javascript/Cliente.js"></script>
+    <script src="../componente/menu/menu.js"></script>
 
 </body>
 

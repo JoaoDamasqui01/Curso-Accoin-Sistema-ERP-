@@ -1,4 +1,4 @@
-import { connSuba } from '../conexao/Supabase.js';
+import { connSubaBase } from '../conexao/Supabase.js';
 
 /*
   ============================================
@@ -8,6 +8,9 @@ import { connSuba } from '../conexao/Supabase.js';
 const formCategoriaProduto = document.getElementById("formCategoriaProduto");
 const tabelaCategorias = document.getElementById("tabelaCategorias");
 const mensagem = document.getElementById("mensagem");
+
+const campoPesquisa = document.getElementById("campoPesquisa");
+const btnPesquisar = document.getElementById("btnPesquisar");
 
 const categoriaProdutoIdInput = document.getElementById("categoriaProdutoId");
 const dsCategoriaProdutoInput = document.getElementById("dsCategoriaProduto");
@@ -31,11 +34,21 @@ function mostrarMensagem(texto, tipo) {
   CARREGAR CATEGORIAS DE PRODUTOS
   ============================================
 */
-async function carregarCategorias() {
-  const { data, error } = await connSuba
+async function carregarCategorias(termoBusca = "") {
+  tabelaCategorias.innerHTML = `<tr><td colspan="4">Buscando categorias...</td></tr>`;
+
+  // Prepara a consulta base
+  let query = connSubaBase
     .from("CATEGORIA_PRODUTO")
-    .select("CATEGORIAPRODUTOID, DS_CATEGORIA_PRODUTO, OBS_CATEGORIA_PRODUTO")
-    .order("CATEGORIAPRODUTOID", { ascending: true });
+    .select("CATEGORIAPRODUTOID, DS_CATEGORIA_PRODUTO, OBS_CATEGORIA_PRODUTO");
+
+  // Se o usuário digitou algo na busca, aplica o filtro ILIKE
+  if (termoBusca.trim() !== "") {
+    query = query.ilike("DS_CATEGORIA_PRODUTO", `%${termoBusca.trim()}%`);
+  }
+
+  // Ordena os resultados
+  const { data, error } = await query.order("CATEGORIAPRODUTOID", { ascending: true });
 
   if (error) {
     tabelaCategorias.innerHTML = `<tr><td colspan="4">Erro ao carregar categorias.</td></tr>`;
@@ -44,13 +57,13 @@ async function carregarCategorias() {
   }
 
   if (data.length === 0) {
-    tabelaCategorias.innerHTML = `<tr><td colspan="4">Nenhuma categoria cadastrada.</td></tr>`;
+    tabelaCategorias.innerHTML = `<tr><td colspan="4">Nenhuma categoria encontrada.</td></tr>`;
     return;
   }
 
   tabelaCategorias.innerHTML = "";
 
-  data.forEach(function(item) {
+  data.forEach(function (item) {
     const linha = document.createElement("tr");
 
     linha.innerHTML = `
@@ -64,7 +77,7 @@ async function carregarCategorias() {
     botaoEditar.textContent = "Editar";
     botaoEditar.className = "btn-editar";
     botaoEditar.type = "button";
-    botaoEditar.addEventListener("click", function() {
+    botaoEditar.addEventListener("click", function () {
       prepararEdicao(item);
     });
 
@@ -72,7 +85,7 @@ async function carregarCategorias() {
     botaoExcluir.textContent = "Excluir";
     botaoExcluir.className = "btn-excluir";
     botaoExcluir.type = "button";
-    botaoExcluir.addEventListener("click", function() {
+    botaoExcluir.addEventListener("click", function () {
       excluirCategoria(item);
     });
 
@@ -83,6 +96,24 @@ async function carregarCategorias() {
     tabelaCategorias.appendChild(linha);
   });
 }
+
+// Busca ao clicar no botão "Pesquisar"
+btnPesquisar.addEventListener("click", function () {
+  carregarCategorias(campoPesquisa.value);
+});
+
+// Busca ao pressionar "Enter" dentro do input de pesquisa
+campoPesquisa.addEventListener("keypress", function (evento) {
+  if (evento.key === "Enter") {
+    evento.preventDefault(); // Impede o submit do formulário
+    carregarCategorias(campoPesquisa.value);
+  }
+});
+
+// OPCIONAL: Busca instantânea em tempo real enquanto digita
+campoPesquisa.addEventListener("input", function () {
+  carregarCategorias(campoPesquisa.value);
+});
 
 /*
   ============================================
@@ -128,7 +159,7 @@ async function salvarCategoria() {
     OBS_CATEGORIA_PRODUTO: observacao
   };
 
-  const { error } = await connSuba
+  const { error } = await connSubaBase
     .from("CATEGORIA_PRODUTO")
     .insert(novaCategoria);
 
@@ -158,7 +189,7 @@ async function atualizarCategoria() {
     return;
   }
 
-  const { error } = await connSuba
+  const { error } = await connSubaBase
     .from("CATEGORIA_PRODUTO")
     .update({
       DS_CATEGORIA_PRODUTO: descricao,
@@ -185,7 +216,7 @@ async function excluirCategoria(item) {
   const confirmou = confirm("Deseja excluir a categoria " + item.DS_CATEGORIA_PRODUTO + "?");
   if (!confirmou) return;
 
-  const { error } = await connSuba
+  const { error } = await connSubaBase
     .from("CATEGORIA_PRODUTO")
     .delete()
     .eq("CATEGORIAPRODUTOID", item.CATEGORIAPRODUTOID);
@@ -208,7 +239,7 @@ async function excluirCategoria(item) {
   EVENTOS
   ============================================
 */
-formCategoriaProduto.addEventListener("submit", async function(evento) {
+formCategoriaProduto.addEventListener("submit", async function (evento) {
   evento.preventDefault();
   const estaEditando = categoriaProdutoIdInput.value !== "";
 
