@@ -39,7 +39,7 @@ const btnPaginaAnterior = document.getElementById("btnPaginaAnterior");
 const btnProximaPagina = document.getElementById("btnProximaPagina");
 const infoPaginacao = document.getElementById("infoPaginacao");
 
-const PRODUTOS_POR_PAGINA = 7;
+const PRODUTOS_POR_PAGINA = 5;
 let paginaAtual = 1;
 
 /*

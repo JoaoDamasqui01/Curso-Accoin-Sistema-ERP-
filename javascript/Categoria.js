@@ -1,255 +1,103 @@
 import { connSubaBase } from '../conexao/Supabase.js';
 
-/*
-  ============================================
-  ELEMENTOS DO DOM
-  ============================================
-*/
-const formCategoriaProduto = document.getElementById("formCategoriaProduto");
-const tabelaCategorias = document.getElementById("tabelaCategorias");
-const mensagem = document.getElementById("mensagem");
+const form = document.getElementById('formCategoriaProduto');
+const tabela = document.getElementById('tabelaCategorias');
+const mensagem = document.getElementById('mensagem');
+const busca = document.getElementById('campoPesquisa');
+const id = document.getElementById('categoriaProdutoId');
+const descricao = document.getElementById('dsCategoriaProduto');
+const observacao = document.getElementById('obsCategoriaProduto');
+const salvar = document.getElementById('btnSalvar');
+const cancelar = document.getElementById('btnCancelarEdicao');
+const modal = document.getElementById('modalListagem');
+const paginacao = document.getElementById('paginacaoCategorias');
+const anterior = document.getElementById('btnPaginaAnterior');
+const proxima = document.getElementById('btnProximaPagina');
+const info = document.getElementById('infoPaginacao');
+const POR_PAGINA = 5;
+let pagina = 1;
+let termo = '';
 
-const campoPesquisa = document.getElementById("campoPesquisa");
-const btnPesquisar = document.getElementById("btnPesquisar");
-
-const categoriaProdutoIdInput = document.getElementById("categoriaProdutoId");
-const dsCategoriaProdutoInput = document.getElementById("dsCategoriaProduto");
-const obsCategoriaProdutoInput = document.getElementById("obsCategoriaProduto");
-
-const btnSalvar = document.getElementById("btnSalvar");
-const btnCancelarEdicao = document.getElementById("btnCancelarEdicao");
-
-/*
-  ============================================
-  MENSAGENS NA TELA
-  ============================================
-*/
-function mostrarMensagem(texto, tipo) {
-  mensagem.textContent = texto;
-  mensagem.className = "mensagem " + tipo;
+function mensagemNaTela(texto, tipo) { mensagem.textContent = texto; mensagem.className = `mensagem ${tipo}`; }
+function atualizarPaginacao(total) {
+  const paginas = Math.max(1, Math.ceil(total / POR_PAGINA));
+  paginacao.hidden = total === 0;
+  info.textContent = `Página ${pagina} de ${paginas} · ${total} categoria${total === 1 ? '' : 's'}`;
+  anterior.disabled = pagina === 1;
+  proxima.disabled = pagina === paginas;
+  return paginas;
 }
 
-/*
-  ============================================
-  CARREGAR CATEGORIAS DE PRODUTOS
-  ============================================
-*/
-async function carregarCategorias(termoBusca = "") {
-  tabelaCategorias.innerHTML = `<tr><td colspan="4">Buscando categorias...</td></tr>`;
-
-  // Prepara a consulta base
-  let query = connSubaBase
-    .from("CATEGORIA_PRODUTO")
-    .select("CATEGORIAPRODUTOID, DS_CATEGORIA_PRODUTO, OBS_CATEGORIA_PRODUTO");
-
-  // Se o usuário digitou algo na busca, aplica o filtro ILIKE
-  if (termoBusca.trim() !== "") {
-    query = query.ilike("DS_CATEGORIA_PRODUTO", `%${termoBusca.trim()}%`);
-  }
-
-  // Ordena os resultados
-  const { data, error } = await query.order("CATEGORIAPRODUTOID", { ascending: true });
-
-  if (error) {
-    tabelaCategorias.innerHTML = `<tr><td colspan="4">Erro ao carregar categorias.</td></tr>`;
-    mostrarMensagem("Erro ao buscar categorias: " + error.message, "erro");
-    return;
-  }
-
-  if (data.length === 0) {
-    tabelaCategorias.innerHTML = `<tr><td colspan="4">Nenhuma categoria encontrada.</td></tr>`;
-    return;
-  }
-
-  tabelaCategorias.innerHTML = "";
-
-  data.forEach(function (item) {
-    const linha = document.createElement("tr");
-
-    linha.innerHTML = `
-      <td>${item.CATEGORIAPRODUTOID}</td>
-      <td>${item.DS_CATEGORIA_PRODUTO}</td>
-      <td>${item.OBS_CATEGORIA_PRODUTO || "-"}</td>
-      <td class="coluna-acoes"></td>
-    `;
-
-    const botaoEditar = document.createElement("button");
-    botaoEditar.textContent = "Editar";
-    botaoEditar.className = "btn-editar";
-    botaoEditar.type = "button";
-    botaoEditar.addEventListener("click", function () {
-      prepararEdicao(item);
-    });
-
-    const botaoExcluir = document.createElement("button");
-    botaoExcluir.textContent = "Excluir";
-    botaoExcluir.className = "btn-excluir";
-    botaoExcluir.type = "button";
-    botaoExcluir.addEventListener("click", function () {
-      excluirCategoria(item);
-    });
-
-    const colAcoes = linha.querySelector(".coluna-acoes");
-    colAcoes.appendChild(botaoEditar);
-    colAcoes.appendChild(botaoExcluir);
-
-    tabelaCategorias.appendChild(linha);
+async function carregarCategorias(novoTermo = termo) {
+  termo = novoTermo.trim();
+  tabela.innerHTML = '<tr><td colspan="3">Buscando categorias...</td></tr>';
+  paginacao.hidden = true;
+  let consulta = connSubaBase.from('CATEGORIA_PRODUTO')
+    .select('CATEGORIAPRODUTOID, DS_CATEGORIA_PRODUTO, OBS_CATEGORIA_PRODUTO', { count: 'exact' });
+  if (termo) consulta = consulta.ilike('DS_CATEGORIA_PRODUTO', `%${termo}%`);
+  const inicio = (pagina - 1) * POR_PAGINA;
+  const { data, error, count } = await consulta.order('CATEGORIAPRODUTOID', { ascending: true }).range(inicio, inicio + POR_PAGINA - 1);
+  if (error) { tabela.innerHTML = '<tr><td colspan="3">Erro ao carregar categorias.</td></tr>'; mensagemNaTela(`Erro ao buscar categorias`, 'erro'); return; }
+  const total = count ?? 0;
+  const paginas = Math.max(1, Math.ceil(total / POR_PAGINA));
+  if (pagina > paginas && total) { pagina = paginas; return carregarCategorias(termo); }
+  atualizarPaginacao(total);
+  if (!data.length) { tabela.innerHTML = '<tr><td colspan="3">Nenhuma categoria encontrada.</td></tr>'; return; }
+  tabela.innerHTML = '';
+  data.forEach((item) => {
+    const linha = document.createElement('tr');
+    const categoria = document.createElement('td');
+    categoria.innerHTML = '<strong class="produto-nome"></strong><span class="produto-meta"></span>';
+    categoria.querySelector('.produto-nome').textContent = item.DS_CATEGORIA_PRODUTO;
+    categoria.querySelector('.produto-meta').textContent = `Código ${item.CATEGORIAPRODUTOID}`;
+    const obs = document.createElement('td'); obs.textContent = item.OBS_CATEGORIA_PRODUTO || 'Sem observação';
+    const acoes = document.createElement('td'); acoes.className = 'coluna-acoes';
+    const editar = document.createElement('button'); editar.type = 'button'; editar.className = 'btn-editar'; editar.textContent = 'Editar';
+    editar.addEventListener('click', () => { prepararEdicao(item); fecharModal(); });
+    const excluir = document.createElement('button'); excluir.type = 'button'; excluir.className = 'btn-excluir'; excluir.textContent = 'Excluir';
+    excluir.addEventListener('click', () => excluirCategoria(item));
+    acoes.append(editar, excluir); linha.append(categoria, obs, acoes); tabela.appendChild(linha);
   });
 }
 
-// Busca ao clicar no botão "Pesquisar"
-btnPesquisar.addEventListener("click", function () {
-  carregarCategorias(campoPesquisa.value);
-});
-
-// Busca ao pressionar "Enter" dentro do input de pesquisa
-campoPesquisa.addEventListener("keypress", function (evento) {
-  if (evento.key === "Enter") {
-    evento.preventDefault(); // Impede o submit do formulário
-    carregarCategorias(campoPesquisa.value);
-  }
-});
-
-// OPCIONAL: Busca instantânea em tempo real enquanto digita
-campoPesquisa.addEventListener("input", function () {
-  carregarCategorias(campoPesquisa.value);
-});
-
-/*
-  ============================================
-  PREPARAR E CANCELAR EDIÇÃO
-  ============================================
-*/
 function prepararEdicao(item) {
-  categoriaProdutoIdInput.value = item.CATEGORIAPRODUTOID;
-  dsCategoriaProdutoInput.value = item.DS_CATEGORIA_PRODUTO;
-  obsCategoriaProdutoInput.value = item.OBS_CATEGORIA_PRODUTO;
-
-  btnSalvar.textContent = "Atualizar";
-  btnCancelarEdicao.style.display = "inline-block";
-  mostrarMensagem("Editando a categoria: " + item.DS_CATEGORIA_PRODUTO, "sucesso");
+  id.value = item.CATEGORIAPRODUTOID; descricao.value = item.DS_CATEGORIA_PRODUTO; observacao.value = item.OBS_CATEGORIA_PRODUTO ?? '';
+  salvar.textContent = 'Atualizar'; cancelar.style.display = 'inline-block'; mensagemNaTela(`Editando a categoria: ${item.DS_CATEGORIA_PRODUTO}`, 'sucesso'); descricao.focus();
 }
-
-function cancelarEdicao() {
-  formCategoriaProduto.reset();
-  categoriaProdutoIdInput.value = "";
-  btnSalvar.textContent = "Salvar";
-  btnCancelarEdicao.style.display = "none";
-  mensagem.textContent = "";
-  mensagem.className = "mensagem";
+function cancelarEdicao() { form.reset(); id.value = ''; salvar.textContent = 'Salvar'; cancelar.style.display = 'none'; mensagem.textContent = ''; mensagem.className = 'mensagem'; }
+function valido() {
+  if (descricao.value.trim() && observacao.value.trim()) return true;
+  mensagemNaTela('Preencha a descrição e a observação da categoria.', 'erro');
+  (descricao.value.trim() ? observacao : descricao).focus(); return false;
 }
-
-/*
-  ============================================
-  SALVAR CATEGORIA
-  ============================================
-*/
 async function salvarCategoria() {
-  const descricao = dsCategoriaProdutoInput.value.trim();
-  const observacao = obsCategoriaProdutoInput.value.trim();
-
-  if (!observacao) {
-    mostrarMensagem("A observação é obrigatória para o cadastro.", "erro");
-    obsCategoriaProdutoInput.focus();
-    return;
-  }
-
-  const novaCategoria = {
-    DS_CATEGORIA_PRODUTO: descricao,
-    OBS_CATEGORIA_PRODUTO: observacao
-  };
-
-  const { error } = await connSubaBase
-    .from("CATEGORIA_PRODUTO")
-    .insert(novaCategoria);
-
-  if (error) {
-    mostrarMensagem("Erro ao salvar categoria: " + error.message, "erro");
-    return;
-  }
-
-  mostrarMensagem("Categoria salva com sucesso!", "sucesso");
-  formCategoriaProduto.reset();
-  carregarCategorias();
+  if (!valido()) return;
+  const { error } = await connSubaBase.from('CATEGORIA_PRODUTO').insert({ DS_CATEGORIA_PRODUTO: descricao.value.trim(), OBS_CATEGORIA_PRODUTO: observacao.value.trim() });
+  if (error) return mensagemNaTela(`Erro ao salvar categoria`, 'erro');
+  mensagemNaTela('Categoria salva com sucesso!', 'sucesso'); form.reset(); pagina = 1; carregarCategorias();
 }
-
-/*
-  ============================================
-  ATUALIZAR CATEGORIA
-  ============================================
-*/
 async function atualizarCategoria() {
-  const id = categoriaProdutoIdInput.value;
-  const descricao = dsCategoriaProdutoInput.value.trim();
-  const observacao = obsCategoriaProdutoInput.value.trim();
-
-  if (!observacao) {
-    mostrarMensagem("A observação é obrigatória para atualização.", "erro");
-    obsCategoriaProdutoInput.focus();
-    return;
-  }
-
-  const { error } = await connSubaBase
-    .from("CATEGORIA_PRODUTO")
-    .update({
-      DS_CATEGORIA_PRODUTO: descricao,
-      OBS_CATEGORIA_PRODUTO: observacao
-    })
-    .eq("CATEGORIAPRODUTOID", id);
-
-  if (error) {
-    mostrarMensagem("Erro ao atualizar categoria: " + error.message, "erro");
-    return;
-  }
-
-  mostrarMensagem("Categoria atualizada com sucesso!", "sucesso");
-  cancelarEdicao();
-  carregarCategorias();
+  if (!valido()) return;
+  const { error } = await connSubaBase.from('CATEGORIA_PRODUTO').update({ DS_CATEGORIA_PRODUTO: descricao.value.trim(), OBS_CATEGORIA_PRODUTO: observacao.value.trim() }).eq('CATEGORIAPRODUTOID', id.value);
+  if (error) return mensagemNaTela(`Erro ao atualizar categoria`, 'erro');
+  cancelarEdicao(); mensagemNaTela('Categoria atualizada com sucesso!', 'sucesso'); carregarCategorias();
 }
-
-/*
-  ============================================
-  EXCLUIR CATEGORIA
-  ============================================
-*/
 async function excluirCategoria(item) {
-  const confirmou = confirm("Deseja excluir a categoria " + item.DS_CATEGORIA_PRODUTO + "?");
-  if (!confirmou) return;
-
-  const { error } = await connSubaBase
-    .from("CATEGORIA_PRODUTO")
-    .delete()
-    .eq("CATEGORIAPRODUTOID", item.CATEGORIAPRODUTOID);
-
-  if (error) {
-    mostrarMensagem("Erro ao excluir categoria: " + error.message, "erro");
-    return;
-  }
-
-  if (categoriaProdutoIdInput.value == item.CATEGORIAPRODUTOID) {
-    cancelarEdicao();
-  }
-
-  mostrarMensagem("Categoria excluída com sucesso!", "sucesso");
-  carregarCategorias();
+  if (!confirm(`Deseja excluir a categoria ${item.DS_CATEGORIA_PRODUTO}?`)) return;
+  const { error } = await connSubaBase.from('CATEGORIA_PRODUTO').delete().eq('CATEGORIAPRODUTOID', item.CATEGORIAPRODUTOID);
+  if (error) return mensagemNaTela(`Erro ao excluir categoria: A Categória está referenciando um produto existente, altere o nome da Categória`);
+  if (id.value === String(item.CATEGORIAPRODUTOID)) cancelarEdicao(); mensagemNaTela('Categoria excluída com sucesso!', 'sucesso'); carregarCategorias();
 }
+function fecharModal() { modal.style.display = 'none'; }
 
-/*
-  ============================================
-  EVENTOS
-  ============================================
-*/
-formCategoriaProduto.addEventListener("submit", async function (evento) {
-  evento.preventDefault();
-  const estaEditando = categoriaProdutoIdInput.value !== "";
-
-  if (estaEditando) {
-    await atualizarCategoria();
-  } else {
-    await salvarCategoria();
-  }
-});
-
-btnCancelarEdicao.addEventListener("click", cancelarEdicao);
-
+form.addEventListener('submit', async (evento) => { evento.preventDefault(); if (id.value) await atualizarCategoria(); else await salvarCategoria(); });
+cancelar.addEventListener('click', cancelarEdicao);
+document.getElementById('btnListarCategoriasModal').addEventListener('click', () => { modal.style.display = 'flex'; pagina = 1; carregarCategorias(busca.value); busca.focus(); });
+document.getElementById('btnFecharModal').addEventListener('click', fecharModal);
+modal.addEventListener('click', (evento) => { if (evento.target === modal) fecharModal(); });
+document.getElementById('btnPesquisar').addEventListener('click', () => { pagina = 1; carregarCategorias(busca.value); });
+busca.addEventListener('keydown', (evento) => { if (evento.key === 'Enter') { evento.preventDefault(); pagina = 1; carregarCategorias(busca.value); } });
+anterior.addEventListener('click', () => { if (pagina > 1) { pagina -= 1; carregarCategorias(); } });
+proxima.addEventListener('click', () => { pagina += 1; carregarCategorias(); });
+document.addEventListener('keydown', (evento) => { if (evento.key === 'Escape' && modal.style.display !== 'none') fecharModal(); });
 carregarCategorias();

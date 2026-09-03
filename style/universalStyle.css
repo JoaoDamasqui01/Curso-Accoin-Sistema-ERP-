@@ -39,6 +39,18 @@ menu-page {
     box-shadow: 0 22px 55px rgba(4, 20, 31, .28);
 }
 
+.pagina-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.pagina-cabecalho .btn-pesquisar {
+    white-space: nowrap;
+}
+
 h1,
 h2 {
     margin: 0;
@@ -625,6 +637,15 @@ td button {
     .container {
         padding: 20px;
         border-radius: 13px;
+    }
+
+    .pagina-cabecalho {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .pagina-cabecalho .btn-pesquisar {
+        width: 100%;
     }
 
     .form-cliente {

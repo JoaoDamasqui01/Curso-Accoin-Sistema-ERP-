@@ -1,78 +1,58 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu</title>
+    <title>Painel</title>
+    <link rel="stylesheet" href="../style/universalStyle.css">
     <link rel="stylesheet" href="../style/homeStyle.css">
 </head>
+<body class="home-page">
+    <menu-page></menu-page>
 
-<body>
+    <main class="container home-container">
+        <section class="home-apresentacao" aria-labelledby="tituloPainel">
+            <div>
+                <p class="lista-produtos__eyebrow">Painel de gestão</p>
+                <h1 id="tituloPainel">Olá, seja bem-vindo!</h1>
+                <p class="home-apresentacao__texto">Acesse os cadastros e mantenha as informações da sua loja organizadas.</p>
+            </div>
+            <img src="../Imagem/Logo.png" alt="Logo Accion" class="home-logo">
+        </section>
 
-    <div class="topo-menu">
-
-        <div class="menu-esquerda">
-
-           
-           
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" aria-expanded="false">
-                    Cadastros
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="Categoria.html">Categorias</a></li>
-                    <li><a class="dropdown-item" href="Cliente.html">Clientes</a></li>
-                    <li><a class="dropdown-item" href="Produto.html">Produtos</a></li>
-                </ul>
+        <section class="home-atalhos" aria-labelledby="tituloAtalhos">
+            <div class="home-secao-cabecalho">
+                <div>
+                    <p class="lista-produtos__eyebrow">Acesso rápido</p>
+                    <h2 id="tituloAtalhos">O que deseja gerenciar?</h2>
+                </div>
             </div>
 
-        
-            <div class="dropdown">
-                <button class="btn btn-warning dropdown-toggle" type="button" aria-expanded="false">
-                    Manutenção
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="usuarios.html">Usuários</a></li>
-                </ul>
+            <div class="home-cards">
+                <a class="home-card home-card--clientes" href="Cliente.html">
+                    <span class="home-card__icone" aria-hidden="true">C</span>
+                    <strong>Clientes</strong>
+                    <span>Cadastre e consulte clientes.</span>
+                </a>
+                <a class="home-card home-card--categorias" href="Categoria.html">
+                    <span class="home-card__icone" aria-hidden="true">K</span>
+                    <strong>Categorias</strong>
+                    <span>Organize os grupos de produtos.</span>
+                </a>
+                <a class="home-card home-card--produtos" href="Produto.html">
+                    <span class="home-card__icone" aria-hidden="true">P</span>
+                    <strong>Produtos</strong>
+                    <span>Gerencie catálogo e preços.</span>
+                </a>
+                <a class="home-card home-card--usuarios" href="Usuario.html">
+                    <span class="home-card__icone" aria-hidden="true">U</span>
+                    <strong>Usuários</strong>
+                    <span>Controle os acessos ao sistema.</span>
+                </a>
             </div>
+        </section>
+    </main>
 
-            <a href="Orcamento.html"><button type="button" class="btn btn-pesquisar">Orçamentos</button></a>
-        </div>
-
-        
-        <a href="login.html"><button type="button" class="btn btn-danger">Sair</button></a>
-
-    </div>
-
-
-    <!-- Área Central da Logo -->
-    <section class="faixa-destaque" aria-label="Destaque visual">
-        <div class="centro-logo">
-            <img src="../Imagem/Tintas.jpg" alt="Logo da Empresa">
-        </div>
-    </section>
-
-
-    <script>
-        document.querySelectorAll('.dropdown-toggle').forEach((botao) => {
-            botao.addEventListener('click', () => {
-                const dropdown = botao.closest('.dropdown');
-                const estaAberto = dropdown.classList.toggle('aberto');
-                botao.setAttribute('aria-expanded', estaAberto);
-            });
-        });
-
-        document.addEventListener('click', (evento) => {
-            if (!evento.target.closest('.dropdown')) {
-                document.querySelectorAll('.dropdown.aberto').forEach((dropdown) => {
-                    dropdown.classList.remove('aberto');
-                    dropdown.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'false');
-                });
-            }
-        });
-    </script>
-
+    <script src="../componente/menu/menu.js"></script>
 </body>
-
 </html>

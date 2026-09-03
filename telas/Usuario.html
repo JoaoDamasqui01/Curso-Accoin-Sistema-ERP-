@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style/universalStyle.css">
+    <title>Cadastro de Usuário</title>
+</head>
+<body>
+    <menu-page></menu-page>
+
+    <main class="container">
+        <div class="pagina-cabecalho">
+            <h1>Cadastro de Usuário</h1>
+            <button type="button" id="btnListarUsuariosModal" class="btn-pesquisar">Listar usuários</button>
+        </div>
+
+        <form id="formUsuario" class="form-cliente">
+            <div class="campo">
+                <label for="usuarioId">Código</label>
+                <input type="number" id="usuarioId" placeholder="Gerado automaticamente" readonly>
+            </div>
+
+            <div class="campo">
+                <label for="nomeUsuario">Nome completo</label>
+                <input type="text" id="nomeUsuario" maxlength="100" placeholder="Digite o nome do usuário" required>
+            </div>
+
+            <div class="campo">
+                <label for="perfilUsuario">Perfil de acesso</label>
+                <select id="perfilUsuario" required>
+                    <option value="">Selecione</option>
+                    <option value="administrador">Administrador</option>
+                    <option value="vendedor">Vendedor</option>
+                    <option value="operador">Operador</option>
+                </select>
+            </div>
+
+            <div class="campo nome">
+                <label for="emailUsuario">E-mail</label>
+                <input type="email" id="emailUsuario" maxlength="150" placeholder="usuario@exemplo.com" required>
+            </div>
+
+
+            <div class="campo">
+                <label for="statusUsuario">Status</label>
+                <select id="statusUsuario" required>
+                    <option value="A">Ativo</option>
+                    <option value="I">Inativo</option>
+                </select>
+            </div>
+
+            <div class="campo">
+                <label for="senhaUsuario">Senha</label>
+                <input type="password" id="senhaUsuario" minlength="5" placeholder="Mínimo de 5 caracteres" required>
+            </div>
+
+            <div class="acoes">
+                <button type="reset" class="btn-limpar">Limpar</button>
+                <button type="button" id="btnCancelarEdicao" class="btn-cancelar-edicao" style="display: none;">Cancelar edição</button>
+                <button type="submit" id="btnSalvar" class="btn-salvar">Salvar</button>
+            </div>
+
+            <p id="mensagem" class="mensagem" aria-live="polite"></p>
+        </form>
+    </main>
+
+    <div id="modalListagem" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="tituloUsuarios">
+        <div class="modal-conteudo">
+            <div class="modal-header">
+                <div>
+                    <p class="lista-produtos__eyebrow">Acessos</p>
+                    <h2 id="tituloUsuarios">Usuários cadastrados</h2>
+                </div>
+                <button type="button" id="btnFecharModal" class="btn-fechar" aria-label="Fechar listagem">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-pesquisa" role="search">
+                    <label class="sr-only" for="campoPesquisa">Pesquisar usuários</label>
+                    <input type="search" id="campoPesquisa" maxlength="100" placeholder="Buscar por nome ou e-mail">
+                    <button type="button" id="btnPesquisar" class="btn-pesquisar">Buscar</button>
+                </div>
+
+                <div class="tabela-produtos-wrapper" tabindex="0">
+                    <table class="tabela-produtos tabela-usuarios">
+                        <caption class="sr-only">Lista de usuários cadastrados</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Usuário</th>
+                                <th scope="col">Perfil</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaUsuarios">
+                            <tr><td colspan="4">A listagem será carregada após conectar o cadastro ao banco de dados.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav id="paginacaoUsuarios" class="paginacao-produtos" aria-label="Paginação de usuários" hidden>
+                    <button type="button" id="btnPaginaAnterior" class="btn-pagina">Anterior</button>
+                    <span id="infoPaginacao" aria-live="polite"></span>
+                    <button type="button" id="btnProximaPagina" class="btn-pagina">Próxima</button>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="../javascript/Usuario.js"></script>
+    <script src="../componente/menu/menu.js"></script>
+</body>
+</html>

@@ -6,96 +6,160 @@ class MenuPage extends HTMLElement {
 
         shadowDOM.innerHTML = `
             <style>
-                .topo-menu {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    gap: 20px;
-                    padding: 14px clamp(18px, 4vw, 46px);
-                    background: #ffffff;
-                    border-bottom: 1px solid #e3e9ed;
-                    box-shadow: 0 2px 10px rgba(23, 43, 58, .05);
-                }
+            .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            }
 
-                .menu-esquerda {
-                    display: flex;
-                    align-items: center;
-                    flex-wrap: wrap;
-                    gap: 5px;
-                }
+            .nav-left {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            }
 
-                .logo-menu {
-                    margin-right: 12px;
-                    color: #172b3a;
-                    font-size: 1rem;
-                    font-weight: 800;
-                    text-decoration: none;
-                }
+            /* Estilos dos Botões Dropdown */
+            .dropdown {
+            position: relative;
+            display: inline-block;
+            }
 
-                .link-menu {
-                    padding: 9px 11px;
-                    color: #52636f;
-                    font-size: .88rem;
-                    font-weight: 700;
-                    text-decoration: none;
-                    border-radius: 7px;
-                    transition: color .18s, background-color .18s;
-                }
+            .btn-nav {
+            padding: 13px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.2s ease;
+            text-decoration: none;
+            }
 
-                .link-menu:hover,
-                .link-menu:focus-visible {
-                    outline: none;
-                }
+            .btn-nav:hover {
+            opacity: 0.9;
+            }
 
-                .link-inicio { color: #17653d; background: #e9f6ed; }
-                .link-produtos { color: #175a94; background: #eaf3fb; }
-                .link-clientes { color: #815300; background: #fff3d5; }
-                .link-categorias { color: #694796; background: #f1eafa; }
-                .link-usuarios { color: #9b3e50; background: #fdecef; }
+            /* Cores Exatas da Imagem */
+            .btn-cadastros {
+            background-color: #0b5ed7; /* Azul Bootstrap */
+            color: #ffffff;
+            }
 
-                .link-inicio:hover, .link-inicio:focus-visible { color: #fff; background: #287445; }
-                .link-produtos:hover, .link-produtos:focus-visible { color: #fff; background: #216bb3; }
-                .link-clientes:hover, .link-clientes:focus-visible { color: #fff; background: #a96d00; }
-                .link-categorias:hover, .link-categorias:focus-visible { color: #fff; background: #7753a2; }
-                .link-usuarios:hover, .link-usuarios:focus-visible { color: #fff; background: #b5475b; }
+            .btn-manutencao {
+            background-color: #d3a009; /* Amarelo Bootstrap */
+            color: #ffffff;
+            }
 
-                .btn-sair {
-                    padding: 9px 13px;
-                    color: #a63741;
-                    font: 700 .84rem Arial, sans-serif;
-                    cursor: pointer;
-                    background: #fff;
-                    border: 1px solid #efcfd2;
-                    border-radius: 7px;
-                    transition: background-color .18s, color .18s;
-                }
+            .btn-home{
+            background-color: #6607ff;
+            color: #ffff}
 
-                .btn-sair:hover,
-                .btn-sair:focus-visible {
-                    color: #ffffff;
-                    background: #c94d55;
-                    outline: none;
-                }
+            .btn-orcamento {
+            background-color: #198754; /* Verde Bootstrap */
+            color: #ffffff;
+            }
 
-                @media (max-width: 680px) {
-                    .topo-menu { align-items: flex-start; }
-                    .logo-menu { width: 100%; }
-                    .menu-esquerda { gap: 3px; }
-                }
+            .btn-sair {
+            background-color: #dc3545; /* Vermelho Bootstrap */
+            color: #ffffff;
+            }
+
+            .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            }
+
+            .btn-cadastros .arrow-down {
+            border-top: 5px solid #ffffff;
+            }
+
+            .btn-manutencao .arrow-down {
+            border-top: 5px solid #000000;
+            }
+
+            .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 0;
+            background-color: #ffffff;
+            min-width: 160px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            z-index: 1000;
+            padding: 6px 0;
+            list-style: none;
+            }
+
+            .dropdown-menu li a {
+            color: #333333;
+            padding: 8px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+            transition: background-color 0.2s;
+            }
+
+            .dropdown-menu li a:hover {
+            background-color: #f1f5f9;
+            color: #0b5ed7;
+            }
+
+            /* Exibir menu ao passar o mouse */
+            .dropdown:hover .dropdown-menu {
+            display: block;
+            }
             </style>
 
-            <div class="topo-menu">
-                <div class="menu-esquerda">
-                    <a class="logo-menu" href="Home.html">Accion</a>
-                    <a class="link-menu link-inicio" href="Home.html">Início</a>
-                    <a class="link-menu link-produtos" href="Produto.html">Produtos</a>
-                    <a class="link-menu link-clientes" href="Cliente.html">Clientes</a>
-                    <a class="link-menu link-categorias" href="Categoria.html">Categorias</a>
-                    <a class="link-menu link-usuarios" href="usuarios.html">Usuários</a>
+            <nav class="navbar">
+                <div class="nav-left">
+                    <a href="Home.html" class="btn-nav btn-home">
+                        Painel
+                    </a>                    
+                    <!-- DROPDOWN CADASTROS -->
+                    <div class="dropdown">
+                        <button type="button" class="btn-nav btn-cadastros">
+                            Cadastros <span class="arrow-down"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="Cliente.html">Clientes</a></li>
+                            <li><a href="Categoria.html">Categorias</a></li>
+                            <li><a href="Produto.html">Produtos</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- DROPDOWN MANUTENÇÃO -->
+                    <div class="dropdown">
+                        <button type="button" class="btn-nav btn-manutencao">
+                            Manutenção <span class="arrow-down"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="Usuario.html">Usuários</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- BOTÃO ORÇAMENTO -->
+                    <a href="orcamento.html" class="btn-nav btn-orcamento">
+                        Orçamento
+                    </a>
                 </div>
 
-                <a href="login.html"><button type="button" class="btn-sair">Sair</button></a>
-            </div>
+                <!-- BOTÃO SAIR -->
+                <div class="nav-right">
+                    <a href="../index.html" class="btn-nav btn-sair">Sair</a>
+                </div>
+            </nav>
         `;
     }
 }
