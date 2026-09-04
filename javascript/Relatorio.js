@@ -31,7 +31,7 @@ export async function GERAR_RELATORIO_ORCAMENTO(orcamentoId) {
 
   // 2. Busca informações do Cliente, Usuário e Itens em paralelo
   const [resultadoCliente, resultadoUsuario, resultadoItens] = await Promise.all([
-    connSubaBase.from('CLIENTE').select('NOME_CLIENTE, CPF_CNPJ, TELEFONE, EMAIL').eq('CLIENTEID', orcamento.CLIENTEID).maybeSingle(),
+    connSubaBase.from('CLIENTE').select('*').eq('CLIENTEID', orcamento.CLIENTEID).maybeSingle(),
     connSubaBase.from('USUARIO').select('NOME_USUARIO').eq('USUARIOID', orcamento.USUARIOID).maybeSingle(),
     connSubaBase.from('ORCAMENTO_ITEM').select('PRODUTOID, QT_PRODUTO, VL_UNITARIO, VL_TOTAL, COR_SISTEMA, OBS_MISTURA').eq('ORCAMENTOID', orcamentoId),
   ]);
