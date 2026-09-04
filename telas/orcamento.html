@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style/universalStyle.css">
+    <title>Orçamentos</title>
+</head>
+<body>
+    <menu-page></menu-page>
+    <main class="container">
+        <div class="pagina-cabecalho">
+            <h1>Orçamento</h1>
+            <button type="button" id="btnListarOrcamentosModal" class="btn-pesquisar">Listar orçamentos</button>
+        </div>
+
+        <form id="formOrcamento" class="form-cliente">
+            <div class="campo">
+                <label for="orcamentoId">Código</label>
+                <input type="number" id="orcamentoId" placeholder="Gerado automaticamente" readonly>
+            </div>
+            <div class="campo">
+                <label for="clienteId">Cliente</label>
+                <select id="clienteId" required><option value="">Carregando clientes...</option></select>
+            </div>
+            <div class="campo">
+                <label for="usuarioId">Responsável</label>
+                <select id="usuarioId" required><option value="">Carregando usuários...</option></select>
+            </div>
+            <div class="campo">
+                <label for="dataOrcamento">Data do orçamento</label>
+                <input type="date" id="dataOrcamento" required>
+            </div>
+            <div class="campo">
+                <label for="dataValidade">Válido até</label>
+                <input type="date" id="dataValidade" required>
+            </div>
+            <div class="campo">
+                <label for="totalOrcamento">Total do orçamento</label>
+                <input type="text" id="totalOrcamento" value="R$ 0,00" readonly>
+            </div>
+
+            <section class="orcamento-itens" aria-labelledby="tituloItens">
+                <div class="orcamento-itens__cabecalho">
+                    <div>
+                        <p class="lista-produtos__eyebrow">Composição</p>
+                        <h2 id="tituloItens">Itens do orçamento</h2>
+                    </div>
+                </div>
+                <div class="orcamento-adicionar">
+                    <div class="campo">
+                        <label for="produtoItem">Produto</label>
+                        <select id="produtoItem"><option value="">Carregando produtos...</option></select>
+                    </div>
+                    <div class="campo">
+                        <label for="quantidadeItem">Quantidade</label>
+                        <input type="number" id="quantidadeItem" value="0">
+                    </div>
+                    <div class="campo">
+                        <label for="corSistemaItem">Cor do sistema</label>
+                        <input type="text" id="corSistemaItem" maxlength="50" placeholder="Opcional">
+                    </div>
+                    <div class="campo">
+                        <label for="obsMisturaItem">Observação / mistura</label>
+                        <input type="text" id="obsMisturaItem" maxlength="255" placeholder="Opcional">
+                    </div>
+                    <button type="button" id="btnAdicionarItem" class="btn-salvar">Adicionar item</button>
+                </div>
+                <div class="tabela-produtos-wrapper">
+                    <table class="tabela-produtos tabela-orcamento-itens">
+                        <thead><tr><th>Produto</th><th>Quantidade</th><th>Valor unitário</th><th>Subtotal</th><th>Ações</th></tr></thead>
+                        <tbody id="tabelaItens"><tr><td colspan="5">Nenhum item adicionado.</td></tr></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="acoes">
+                <button type="reset" class="btn-limpar">Limpar</button>
+                <button type="button" id="btnCancelarEdicao" class="btn-cancelar-edicao" style="display: none;">Cancelar edição</button>
+                <button type="submit" id="btnSalvar" class="btn-salvar">Salvar orçamento</button>
+            </div>
+            <p id="mensagem" class="mensagem" aria-live="polite"></p>
+        </form>
+    </main>
+
+    <div id="modalListagem" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="tituloOrcamentos">
+        <div class="modal-conteudo">
+            <div class="modal-header">
+                <div>
+                    <p class="lista-produtos__eyebrow">Histórico</p>
+                    <h2 id="tituloOrcamentos">Orçamentos cadastrados</h2>
+                </div>
+                <button type="button" id="btnFecharModal" class="btn-fechar" aria-label="Fechar listagem">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-pesquisa" role="search">
+                    <label class="sr-only" for="campoPesquisa">Pesquisar orçamentos</label>
+                    <input type="search" id="campoPesquisa" placeholder="Buscar por cliente">
+                    <button type="button" id="btnPesquisar" class="btn-pesquisar">Buscar</button>
+                </div>
+                <div class="tabela-produtos-wrapper">
+                    <table class="tabela-produtos tabela-orcamentos">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Cliente</th>
+                                <th>Emissão</th>
+                                <th>Validade</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaOrcamentos"><tr><td colspan="7">Carregando orçamentos...</td></tr></tbody>
+                    </table>
+                </div>
+                <nav id="paginacaoOrcamentos" class="paginacao-produtos" aria-label="Paginação de orçamentos" hidden>
+                    <button type="button" id="btnPaginaAnterior" class="btn-pagina">Anterior</button>
+                    <span id="infoPaginacao" aria-live="polite"></span>
+                    <button type="button" id="btnProximaPagina" class="btn-pagina">Próxima</button>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="../javascript/Orcamento.js"></script>
+    <script src="../componente/menu/menu.js"></script>
+</body>
+</html>

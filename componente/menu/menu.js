@@ -151,7 +151,7 @@ class MenuPage extends HTMLElement {
 
                     <!-- BOTÃO ORÇAMENTO -->
                     <a href="orcamento.html" class="btn-nav btn-orcamento">
-                        Orçamento
+                        Proposta Comercial
                     </a>
                 </div>
 
