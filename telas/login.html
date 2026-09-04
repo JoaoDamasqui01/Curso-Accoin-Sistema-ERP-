@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Sistema ERP</title>
   <link rel="stylesheet" href="../style/loginStyle.css">
 </head>
+
 <body>
   <main class="card-login">
     <form id="formLogin" class="form-body" novalidate>
@@ -23,9 +25,15 @@
         <a href="#" id="esqueceuSenha" class="forgot-password">Esqueceu a senha?</a>
       </div>
     </form>
+
+    <!-- Container da imagem ao lado -->
+    <div class="login-image-container">
+      <img src="../Imagem/Logo.png" alt="Logo ERP" class="login-image">
+    </div>
   </main>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../conexao/Supabase.js"></script>
-  <script src="../javascript/login.js"></script>
+  <script type="module" src="../javascript/login.js"></script>
 </body>
+
 </html>
