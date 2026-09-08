@@ -150,14 +150,14 @@ class MenuPage extends HTMLElement {
                     </div>
 
                     <!-- BOTÃO ORÇAMENTO -->
-                    <a href="orcamento.html" class="btn-nav btn-orcamento">
+                    <a href="Orcamento.html" class="btn-nav btn-orcamento">
                         Proposta Comercial
                     </a>
                 </div>
 
                 <!-- BOTÃO SAIR -->
                 <div class="nav-right">
-                    <a href="../index.html" class="btn-nav btn-sair">Sair</a>
+                    <a href="Login.html" class="btn-nav btn-sair">Sair</a>
                 </div>
             </nav>
         `;

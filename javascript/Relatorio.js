@@ -31,7 +31,7 @@ export async function GERAR_RELATORIO_ORCAMENTO(orcamentoId) {
 
   // 2. Busca informações do Cliente, Usuário e Itens em paralelo
   const [resultadoCliente, resultadoUsuario, resultadoItens] = await Promise.all([
-    connSubaBase.from('CLIENTE').select('*').eq('CLIENTEID', orcamento.CLIENTEID).maybeSingle(),
+    connSubaBase.from('CLIENTE').select('NOME_CLIENTE, CPF_CNPJ_CLIENTE, TELEFONE, EMAIL').eq('CLIENTEID', orcamento.CLIENTEID).maybeSingle(),
     connSubaBase.from('USUARIO').select('NOME_USUARIO').eq('USUARIOID', orcamento.USUARIOID).maybeSingle(),
     connSubaBase.from('ORCAMENTO_ITEM').select('PRODUTOID, QT_PRODUTO, VL_UNITARIO, VL_TOTAL, COR_SISTEMA, OBS_MISTURA').eq('ORCAMENTOID', orcamentoId),
   ]);
@@ -119,7 +119,7 @@ export async function GERAR_RELATORIO_ORCAMENTO(orcamentoId) {
         <div class="bloco">
           <h2>Cliente</h2>
           <p><strong>${escaparHtml(resultadoCliente.data?.NOME_CLIENTE || 'Não informado')}</strong></p>
-          <p>CPF/CNPJ: ${escaparHtml(resultadoCliente.data?.CPF_CNPJ || '-')}</p>
+          <p>CPF/CNPJ: ${escaparHtml(resultadoCliente.data?.CPF_CNPJ_CLIENTE || '-')}</p>
           <p>Telefone: ${escaparHtml(resultadoCliente.data?.TELEFONE || '-')}</p>
           <p>E-mail: ${escaparHtml(resultadoCliente.data?.EMAIL || '-')}</p>
         </div>
