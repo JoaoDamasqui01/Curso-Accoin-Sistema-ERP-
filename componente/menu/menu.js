@@ -1,167 +1,210 @@
 class MenuPage extends HTMLElement {
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        const shadowDOM = this.attachShadow({ mode: 'open' });
+    const shadowDOM = this.attachShadow({ mode: 'open' });
 
-        shadowDOM.innerHTML = `
-            <style>
-            .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #ffffff;
-            padding: 12px 20px;
-            border-bottom: 1px solid #e0e0e0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            }
+    shadowDOM.innerHTML = `
+      <style>
+        /* Botão Hambúrguer Fixo no Topo */
+        .btn-hamburguer {
+          position: fixed;
+          top: 15px;
+          left: 15px;
+          z-index: 1000;
+          background-color: #172b3a;
+          color: #ffffff;
+          border: none;
+          padding: 10px 14px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+          transition: background-color 0.2s ease;
+        }
 
-            .nav-left {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            }
+        .btn-hamburguer:hover {
+          background-color: #243746;
+        }
 
-            /* Estilos dos Botões Dropdown */
-            .dropdown {
-            position: relative;
-            display: inline-block;
-            }
+        /* Fundo de Sobreposição Escuro (Overlay) */
+        .menu-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background-color: rgba(0, 0, 0, 0.4);
+          z-index: 1001;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
 
-            .btn-nav {
-            padding: 13px 16px;
-            font-size: 14px;
-            font-weight: 500;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: opacity 0.2s ease;
-            text-decoration: none;
-            }
+        .menu-overlay.aberto {
+          opacity: 1;
+          visibility: visible;
+        }
 
-            .btn-nav:hover {
-            opacity: 0.9;
-            }
+        /* Painel Lateral Offcanvas */
+        .menu-lateral {
+          position: fixed;
+          top: 0;
+          left: -280px;
+          width: 280px;
+          height: 100vh;
+          background-color: #172b3a;
+          color: #ffffff;
+          z-index: 1002;
+          display: flex;
+          flex-direction: column;
+          box-shadow: 2px 0 12px rgba(0,0,0,0.25);
+          transition: left 0.3s ease-in-out;
+          font-family: Arial, sans-serif;
+        }
 
-            /* Cores Exatas da Imagem */
-            .btn-cadastros {
-            background-color: #0b5ed7; /* Azul Bootstrap */
-            color: #ffffff;
-            }
+        .menu-lateral.aberto {
+          left: 0;
+        }
 
-            .btn-manutencao {
-            background-color: #d3a009; /* Amarelo Bootstrap */
-            color: #ffffff;
-            }
+        /* Cabeçalho do Menu */
+        .menu-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-            .btn-home{
-            background-color: #6607ff;
-            color: #ffff}
+        .menu-header h2 {
+          margin: 0;
+          font-size: 18px;
+          color: #ffffff;
+        }
 
-            .btn-orcamento {
-            background-color: #198754; /* Verde Bootstrap */
-            color: #ffffff;
-            }
+        .btn-fechar {
+          background: none;
+          border: none;
+          color: #a0aec0;
+          font-size: 20px;
+          cursor: pointer;
+          padding: 4px 8px;
+        }
 
-            .btn-sair {
-            background-color: #dc3545; /* Vermelho Bootstrap */
-            color: #ffffff;
-            }
+        .btn-fechar:hover {
+          color: #ffffff;
+        }
 
-            .arrow-down {
-            width: 0;
-            height: 0;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            }
+        /* Links do Menu */
+        .menu-corpo {
+          flex: 1;
+          overflow-y: auto;
+          padding: 15px 0;
+        }
 
-            .btn-cadastros .arrow-down {
-            border-top: 5px solid #ffffff;
-            }
+        .secao-titulo {
+          padding: 10px 20px 5px 20px;
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          color: #718096;
+          font-weight: bold;
+        }
 
-            .btn-manutencao .arrow-down {
-            border-top: 5px solid #000000;
-            }
+        .menu-corpo a {
+          display: flex;
+          align-items: center;
+          padding: 12px 20px;
+          color: #e2e8f0;
+          text-decoration: none;
+          font-size: 14px;
+          transition: background-color 0.2s, color 0.2s;
+        }
 
-            .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            margin-top: 0;
-            background-color: #ffffff;
-            min-width: 160px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
-            z-index: 1000;
-            padding: 6px 0;
-            list-style: none;
-            }
+        .menu-corpo a:hover {
+          background-color: rgba(255, 255, 255, 0.08);
+          color: #b7d63a;
+        }
 
-            .dropdown-menu li a {
-            color: #333333;
-            padding: 8px 16px;
-            text-decoration: none;
-            display: block;
-            font-size: 14px;
-            transition: background-color 0.2s;
-            }
+        /* Rodapé Fixado no Fim */
+        .menu-footer {
+          padding: 20px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-            .dropdown-menu li a:hover {
-            background-color: #f1f5f9;
-            color: #0b5ed7;
-            }
+        .btn-sair {
+          display: block;
+          width: 100%;
+          padding: 12px;
+          background-color: #dc3545;
+          color: #ffffff;
+          border: none;
+          border-radius: 6px;
+          text-align: center;
+          text-decoration: none;
+          font-size: 14px;
+          font-weight: bold;
+          box-sizing: border-box;
+          transition: background-color 0.2s;
+        }
 
-            /* Exibir menu ao passar o mouse */
-            .dropdown:hover .dropdown-menu {
-            display: block;
-            }
-            </style>
+        .btn-sair:hover {
+          background-color: #bb2d3b;
+        }
+      </style>
 
-            <nav class="navbar">
-                <div class="nav-left">
-                    <a href="Home.html" class="btn-nav btn-home">
-                        Painel
-                    </a>                    
-                    <!-- DROPDOWN CADASTROS -->
-                    <div class="dropdown">
-                        <button type="button" class="btn-nav btn-cadastros">
-                            Cadastros <span class="arrow-down"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="Cliente.html">Clientes</a></li>
-                            <li><a href="Categoria.html">Categorias</a></li>
-                            <li><a href="Produto.html">Produtos</a></li>
-                        </ul>
-                    </div>
+      <!-- Botão Hambúrguer -->
+      <button class="btn-hamburguer" id="btnToggle" aria-label="Abrir Menu">☰</button>
 
-                    <!-- DROPDOWN MANUTENÇÃO -->
-                    <div class="dropdown">
-                        <button type="button" class="btn-nav btn-manutencao">
-                            Manutenção <span class="arrow-down"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="Usuario.html">Usuários</a></li>
-                        </ul>
-                    </div>
+      <!-- Overlay (fundo escuro ao abrir) -->
+      <div class="menu-overlay" id="overlay"></div>
 
-                    <!-- BOTÃO ORÇAMENTO -->
-                    <a href="Orcamento.html" class="btn-nav btn-orcamento">
-                        Proposta Comercial
-                    </a>
-                </div>
+      <!-- Menu Lateral -->
+      <aside class="menu-lateral" id="sidebar">
+        <div class="menu-header">
+          <h2>Cor&Gestão</h2>
+          <button class="btn-fechar" id="btnFechar">✕</button>
+        </div>
 
-                <!-- BOTÃO SAIR -->
-                <div class="nav-right">
-                    <a href="Login.html" class="btn-nav btn-sair">Sair</a>
-                </div>
-            </nav>
-        `;
-    }
+        <nav class="menu-corpo">
+          <a href="Home.html">📌 Painel Principal</a>
+
+          <div class="secao-titulo">Cadastros</div>
+          <a href="Cliente.html">👥 Clientes</a>
+          <a href="Categoria.html">🏷️ Categorias</a>
+          <a href="Produto.html">🎨 Produtos</a>
+
+          <div class="secao-titulo">Manutenção</div>
+          <a href="Usuario.html">⚙️ Usuários</a>
+
+          <div class="secao-titulo">Comercial</div>
+          <a href="Orcamento.html">📄 Proposta Comercial</a>
+        </nav>
+
+        <div class="menu-footer">
+          <a href="Login.html" class="btn-sair">🚪 Sair</a>
+        </div>
+      </aside>
+    `;
+
+    // Lógica para abrir e fechar o menu no Shadow DOM
+    const sidebar = shadowDOM.getElementById('sidebar');
+    const overlay = shadowDOM.getElementById('overlay');
+    const btnToggle = shadowDOM.getElementById('btnToggle');
+    const btnFechar = shadowDOM.getElementById('btnFechar');
+
+    const toggleMenu = () => {
+      sidebar.classList.toggle('aberto');
+      overlay.classList.toggle('aberto');
+    };
+
+    btnToggle.addEventListener('click', toggleMenu);
+    btnFechar.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+  }
 }
 
 customElements.define('menu-page', MenuPage);
