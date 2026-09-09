@@ -15,58 +15,50 @@ body {
     background: linear-gradient(135deg, #172b3a 0%, #284c63 52%, #70a42f 160%);
 }
 
-/* Card central do Login ampliado para 2 colunas */
+/* Card central do Login com posicionamento relativo para a imagem flutuar */
 .card-login {
+    position: relative;
     width: 100%;
-    max-width: 866px; /* Expandido para acomodar o formulário e a imagem */
+    max-width: 420px; /* Largura ideal para card de login */
     background-color: #ffffff;
     border-radius: 12px;
-    overflow: hidden;
+    overflow: visible; /* Permite que o Ditto saia para fora do card no topo */
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: stretch;
+    margin-top: 40px; /* Espaço para compensar a imagem que vai subir */
 }
 
-/* Formulário ocupa metade do card */
+/* Container que joga o Ditto para o topo exato, centralizado */
+.login-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: absolute;
+    top: -50px; /* Faz a imagem subir para fora do card */
+    left: 0;
+}
+
+/* Estilo do Ditto: tamanho perfeito, redondinho e com borda branca */
+.img-ditto {
+    width: 95px;
+    height: 95px;
+    object-fit: cover;
+    border-radius: 50%; /* Deixa redondinho */
+    border: 4px solid #ffffff; /* Borda branca grossa */
+    background-color: #ffffff; /* Fundo caso a imagem seja transparente */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Sombra elegante */
+}
+
+/* Formulário com espaçamento adequado abaixo da imagem */
 .form-body {
     flex: 1;
-    padding: 40px 18px;
+    padding: 60px 24px 30px 24px; /* Topo maior para dar espaço ao Ditto */
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
-
-/* Container e imagem do lado direito */
-.login-image-container {
-    flex: 1;
-   overflow: hidden;
-   display: flex;
-}
-
-.login-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Faz a imagem cobrir todo o container mantendo a proporção */
-    object-position: center; /* Impede que a imagem seja deformada/achatada */
-}
-
-/* Responsividade: Volta para 1 coluna em telas menores */
-@media (max-width: 640px) {
-    .card-login {
-        flex-direction: column-reverse;
-        max-width: 400px;
-    }
-
-    .login-image-container {
-        padding: 20px;
-        border-left: none;
-        border-bottom: 1px solid #eaeaea;
-    }
-
-    .login-image {
-        max-height: 120px;
-    }
 }
 
 /* Padrão estabelecido para os campos */
@@ -162,9 +154,9 @@ body.alto-contraste .card-login {
     box-shadow: none !important;
 }
 
-body.alto-contraste .login-image-container {
-    background-color: #1a1a1a !important;
+body.alto-contraste .img-ditto {
     border-color: #ffff00 !important;
+    background-color: #121212 !important;
 }
 
 body.alto-contraste .campo label,

@@ -4,7 +4,7 @@
     --azul-escuro: #172b3a;
     --azul: #216bb3;
     --verde: #4f8b22;
-    --borda: #dce4ea;
+    --branco: #dce4ea;
     --texto: #243746;
     --texto-suave: #687886;
     --roxo: #6607ff;
@@ -21,7 +21,8 @@ body {
     color: var(--texto);
     background: linear-gradient(135deg, #172b3a 0%, #284c63 52%, #70a42f 160%);
     display: flex;
-    flex-direction: row; /* Alinha o menu lateral e o conteúdo lado a lado no desktop */
+    flex-direction: row;
+    /* Alinha o menu lateral e o conteúdo lado a lado no desktop */
 }
 
 /* O componente do menu lateral */
@@ -35,17 +36,18 @@ menu-page {
 .container {
     width: min(1180px, 100%);
     margin: 40px auto;
-    padding: clamp(24px, 4vw, 42px);
+    /*padding: clamp(24px, 4vw, 42px);
     background: #fdfdfd;
     border: 1px solid rgba(255, 255, 255, .4);
     border-radius: 18px;
-    box-shadow: 0 22px 55px rgba(4, 20, 31, .28);
+    box-shadow: 0 22px 55px rgba(4, 20, 31, .28);*/
 }
 
 /* Wrapper geral para empurrar o conteúdo para o lado do menu fixo */
 .main-wrapper {
     flex: 1;
-    margin-left: 220px; /* Espaço exato do menu lateral fixo */
+    margin-left: 220px;
+    /* Espaço exato do menu lateral fixo */
     box-sizing: border-box;
     display: flex;
     justify-content: center;
@@ -68,7 +70,7 @@ menu-page {
 h1,
 h2 {
     margin: 0;
-    color: var(--azul-escuro);
+    color: var(--branco);
 }
 
 h1 {
@@ -92,6 +94,7 @@ h2 {
     font-size: 1.12rem;
 }
 
+
 .form-cliente {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -106,9 +109,17 @@ h2 {
 }
 
 .campo label {
-    color: #415362;
+    color: var(--branco);
     font-size: .82rem;
     font-weight: 700;
+}
+
+label.subTitulo {
+    color: var(--azul-escuro);
+}
+
+.itituloItens{
+    color: var(--azul-escuro);
 }
 
 .campo input,
@@ -120,7 +131,7 @@ h2 {
     font: inherit;
     font-size: .92rem;
     background: #d7d8d9;
-    border: 1px solid var(--borda);
+    border: 1px solid var(--branco);
     border-radius: 9px;
     outline: none;
     transition: border-color .2s, box-shadow .2s, background .2s;
@@ -148,19 +159,20 @@ h2 {
     grid-column: 1 / -1;
     margin-top: 12px;
     overflow: hidden;
-    border: 1px solid var(--borda);
+    border: 1px solid var(--branco);
     border-radius: 14px;
 }
 
 .orcamento-itens__cabecalho {
     padding: 20px 22px;
     background: linear-gradient(115deg, #f5f8fa, #fff);
-    border-bottom: 1px solid var(--borda);
+    border-bottom: 1px solid var(--branco);
 }
 
 .orcamento-itens__cabecalho h2 {
     margin: 0;
     font-size: 1.1rem;
+    color: var(--azul-escuro);
 }
 
 .orcamento-adicionar {
@@ -274,7 +286,7 @@ table {
     border-collapse: separate;
     border-spacing: 0;
     overflow: hidden;
-    border: 1px solid var(--borda);
+    border: 1px solid var(--branco);
     border-radius: 10px;
     font-size: .86rem;
 }
@@ -309,7 +321,7 @@ td button {
     margin-top: 42px;
     overflow: hidden;
     background: #fff;
-    border: 1px solid var(--borda);
+    border: 1px solid var(--branco);
     border-radius: 14px;
     box-shadow: 0 10px 28px rgba(23, 43, 58, .08);
 }
@@ -321,7 +333,7 @@ td button {
     gap: 24px;
     padding: 24px 26px;
     background: linear-gradient(115deg, #f5f8fa, #fff);
-    border-bottom: 1px solid var(--borda);
+    border-bottom: 1px solid var(--branco);
 }
 
 .lista-produtos h2 {
@@ -367,7 +379,7 @@ td button {
     font: inherit;
     font-size: .88rem;
     background: #fff;
-    border: 1px solid var(--borda);
+    border: 1px solid var(--branco);
     border-radius: 8px;
     outline: none;
 }
@@ -391,7 +403,7 @@ td button {
     padding: 13px 18px;
     color: #657783;
     background: #f5f8fa;
-    border-bottom: 1px solid var(--borda);
+    border-bottom: 1px solid var(--branco);
 }
 
 .tabela-produtos td {
@@ -581,11 +593,12 @@ td button {
     align-items: center;
     gap: 16px;
     padding-bottom: 15px;
-    border-bottom: 1px solid var(--borda);
+    border-bottom: 1px solid var(--branco);
 }
 
 .modal-header h2 {
     margin: 0;
+    color: var(--azul-escuro);
 }
 
 .modal-body {
@@ -608,7 +621,7 @@ td button {
     font: inherit;
     font-size: .88rem;
     background: #fff;
-    border: 1px solid var(--borda);
+    border: 1px solid var(--branco);
     border-radius: 8px;
     outline: none;
 }
@@ -617,6 +630,7 @@ td button {
     border-color: var(--azul);
     box-shadow: 0 0 0 3px rgba(33, 107, 179, .14);
 }
+
 
 .paginacao-produtos {
     display: flex;
@@ -667,13 +681,16 @@ td button {
    ========================================================= */
 @media (max-width: 1366px) {
     body {
-        flex-direction: column; /* Empilha o menu no topo via hambúrguer */
+        flex-direction: column;
+        /* Empilha o menu no topo via hambúrguer */
     }
 
     .main-wrapper {
-        margin-left: 0; /* Remove a margem lateral quando o menu vira gaveta */
+        margin-left: 0;
+        /* Remove a margem lateral quando o menu vira gaveta */
         padding: 20px;
-        padding-top: 80px; /* Espaço para o botão hambúrguer flutuante */
+        padding-top: 80px;
+        /* Espaço para o botão hambúrguer flutuante */
     }
 
     .form-cliente {

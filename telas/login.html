@@ -10,14 +10,18 @@
   <script>
     // Se O USUÁRIO JÁ ESTIVER LOGADO, manda direto para a Home!
     if (sessionStorage.getItem('usuarioLogado') === 'true') {
-      window.location.replace('Home.html'); // Ajuste o nome da sua tela principal se necessário
+      window.location.replace('Home.html');
     }
   </script>
-
 </head>
 
 <body>
   <main class="card-login">
+    <!-- Container do Ditto centralizado e saltando para fora no topo -->
+    <div class="login-image-container">
+      <img src="../Imagem/dittoFlow.png" alt="Logo Ditto" class="img-ditto">
+    </div>
+
     <form id="formLogin" class="form-body" novalidate>
       <div class="campo">
         <label for="usuario">E-mail</label>
@@ -33,11 +37,6 @@
         <a href="#" id="esqueceuSenha" class="forgot-password">Esqueceu a senha?</a>
       </div>
     </form>
-
-    <!-- Container da imagem ao lado -->
-    <div class="login-image-container">
-      <img src="../Imagem/dittoFlow.png" alt="Logo ERP" class="login-image">
-    </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

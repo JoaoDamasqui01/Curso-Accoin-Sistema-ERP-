@@ -19,6 +19,7 @@
 
 .home-apresentacao h1 {
     max-width: 530px;
+    color: var(--azul-escuro);
 }
 
 .home-apresentacao__texto {
