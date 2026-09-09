@@ -85,7 +85,7 @@ async function atualizarCategoria() {
 async function excluirCategoria(item) {
   if (!confirm(`Deseja excluir a categoria ${item.DS_CATEGORIA_PRODUTO}?`)) return;
   const { error } = await connSubaBase.from('CATEGORIA_PRODUTO').delete().eq('CATEGORIAPRODUTOID', item.CATEGORIAPRODUTOID);
-  if (error) return mensagemNaTela(`Erro ao excluir categoria: A Categória está referenciando um produto existente, altere o nome da Categória`);
+  if (error) return mensagemNaTela(`Erro ao excluir categoria: A Categória está referenciando um produto existente, altere o nome da Categória`, 'erro');
   if (id.value === String(item.CATEGORIAPRODUTOID)) cancelarEdicao(); mensagemNaTela('Categoria excluída com sucesso!', 'sucesso'); carregarCategorias();
 }
 function fecharModal() { modal.style.display = 'none'; }

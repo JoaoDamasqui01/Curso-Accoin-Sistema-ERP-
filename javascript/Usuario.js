@@ -206,7 +206,7 @@ async function atualizarUsuario() {
 async function excluirUsuario(usuario) {
   if (!confirm(`Deseja excluir o usuário ${usuario.NOME_USUARIO}?`)) return;
   const { error } = await connSubaBase.from('USUARIO').delete().eq('USUARIOID', usuario.USUARIOID);
-  if (error) return mostrarMensagem(`Erro ao excluir usuário: ${error.message}`, 'erro');
+  if (error) return mostrarMensagem(`Erro ao excluir usuário: Esse Usuário está anexado com vendas, desative esse usuário`, 'erro');
   if (usuarioIdInput.value === String(usuario.USUARIOID)) cancelarEdicao();
   mostrarMensagem('Usuário excluído com sucesso!', 'sucesso');
   carregarUsuarios();
