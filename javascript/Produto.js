@@ -282,7 +282,7 @@ function prepararEdicao(item) {
 
   if (btnSalvar) btnSalvar.textContent = "Atualizar";
   if (btnCancelarEdicao) btnCancelarEdicao.style.display = "inline-block";
-  mostrarMensagem("Editando o produto: " + item.DS_PRODUTO, "sucesso");
+  mostrarMensagem("Editando o produto: " + item.DS_PRODUTO, "edicao");
 }
 
 function cancelarEdicao() {

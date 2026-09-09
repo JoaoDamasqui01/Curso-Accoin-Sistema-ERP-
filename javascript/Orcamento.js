@@ -330,7 +330,7 @@ async function prepararEdicao(orcamento) {
   $('btnSalvar').textContent = 'Atualizar orçamento';
   $('btnCancelarEdicao').style.display = 'inline-block';
   $('modalListagem').style.display = 'none';
-  mostrarMensagem(`Editando orçamento #${orcamento.ORCAMENTOID}`, 'sucesso');
+  mostrarMensagem(`Editando orçamento #${orcamento.ORCAMENTOID}`, 'edicao');
 }
 
 async function excluirOrcamento(orcamento) {

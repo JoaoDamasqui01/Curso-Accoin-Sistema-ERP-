@@ -163,7 +163,7 @@ function prepararEdicao(usuario) {
   senhaUsuarioInput.placeholder = 'Deixe em branco para manter a senha atual';
   btnSalvar.textContent = 'Atualizar';
   btnCancelarEdicao.style.display = 'inline-block';
-  mostrarMensagem(`Editando o usuário: ${usuario.NOME_USUARIO}`, 'sucesso');
+  mostrarMensagem(`Editando o usuário: ${usuario.NOME_USUARIO}`, 'edicao');
   nomeUsuarioInput.focus();
 }
 

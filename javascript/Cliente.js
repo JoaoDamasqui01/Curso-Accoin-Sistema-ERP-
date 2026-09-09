@@ -158,7 +158,7 @@ function prepararEdicao(cliente) {
   cpfCnpj.readOnly = true; 
   salvar.textContent = 'Atualizar'; 
   cancelar.style.display = 'inline-block';
-  mostrarMensagem(`Editando o cliente: ${cliente.NOME_CLIENTE}`, 'sucesso'); 
+  mostrarMensagem(`Editando o cliente: ${cliente.NOME_CLIENTE}`, 'edicao'); 
   nome.focus();
 }
 

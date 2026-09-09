@@ -281,6 +281,10 @@ button:active {
     color: #f43343;
 }
 
+.edicao{
+    color: #E65100;
+}
+
 table {
     width: 100%;
     border-collapse: separate;

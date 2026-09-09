@@ -62,7 +62,7 @@ async function carregarCategorias(novoTermo = termo) {
 
 function prepararEdicao(item) {
   id.value = item.CATEGORIAPRODUTOID; descricao.value = item.DS_CATEGORIA_PRODUTO; observacao.value = item.OBS_CATEGORIA_PRODUTO ?? '';
-  salvar.textContent = 'Atualizar'; cancelar.style.display = 'inline-block'; mensagemNaTela(`Editando a categoria: ${item.DS_CATEGORIA_PRODUTO}`, 'sucesso'); descricao.focus();
+  salvar.textContent = 'Atualizar'; cancelar.style.display = 'inline-block'; mensagemNaTela(`Editando a categoria: ${item.DS_CATEGORIA_PRODUTO}`, 'edicao'); descricao.focus();
 }
 function cancelarEdicao() { form.reset(); id.value = ''; salvar.textContent = 'Salvar'; cancelar.style.display = 'none'; mensagem.textContent = ''; mensagem.className = 'mensagem'; }
 function valido() {
