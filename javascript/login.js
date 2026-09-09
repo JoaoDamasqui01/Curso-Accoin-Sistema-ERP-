@@ -36,32 +36,32 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       definirCarregamento(true);
 
-      // Opção 1: Autenticação Nativa do Supabase (Recomendado se usar Auth)
+      // 1. Tenta Autenticação Nativa do Supabase
       const { data: authData, error: authError } = await connSubaBase.auth.signInWithPassword({
         email,
         password: senha,
       });
 
       if (authError) {
-        // Fallback / Opção 2: Consulta direta à tabela USUARIO
+        // 2. Fallback: Consulta direta à tabela USUARIO
         const { data: usuario, error: dbError } = await connSubaBase
           .from('USUARIO')
           .select('USUARIOID, NOME_USUARIO, EMAIL')
           .eq('EMAIL', email)
+          .eq('SENHA', senha)
           .maybeSingle();
 
         if (dbError || !usuario) {
           throw new Error('E-mail ou senha incorretos.');
         }
 
-        // Salva os dados da sessão localmente
         salvarSessao(usuario);
       } else {
         salvarSessao(authData.user);
       }
 
-      // Redireciona para o painel principal
-      window.location.href = '../telas/Home.html';
+      // Redireciona para a página principal (ajuste o caminho se necessário)
+      window.location.replace('Home.html');
 
     } catch (erro) {
       exibirErro(erro.message || 'Falha ao realizar login. Tente novamente.');
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Auxiliares
+  // Funções Auxiliares
   function exibirErro(mensagem) {
     mensagemErro.textContent = mensagem;
     mensagemErro.style.display = mensagem ? 'block' : 'none';
@@ -115,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function salvarSessao(usuario) {
-    localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+    sessionStorage.setItem('usuarioLogado', 'true');
+    sessionStorage.setItem('dadosUsuario', JSON.stringify(usuario));
   }
 });

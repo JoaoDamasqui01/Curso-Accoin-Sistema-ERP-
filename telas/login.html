@@ -6,6 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Sistema ERP</title>
   <link rel="stylesheet" href="../style/loginStyle.css">
+
+  <script>
+    // Se O USUÁRIO JÁ ESTIVER LOGADO, manda direto para a Home!
+    if (sessionStorage.getItem('usuarioLogado') === 'true') {
+      window.location.replace('Home.html'); // Ajuste o nome da sua tela principal se necessário
+    }
+  </script>
+
 </head>
 
 <body>
@@ -28,7 +36,7 @@
 
     <!-- Container da imagem ao lado -->
     <div class="login-image-container">
-      <img src="../Imagem/Logo.png" alt="Logo ERP" class="login-image">
+      <img src="../Imagem/dittoFlow.png" alt="Logo ERP" class="login-image">
     </div>
   </main>
 

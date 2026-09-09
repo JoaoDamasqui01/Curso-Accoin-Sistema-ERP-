@@ -18,7 +18,7 @@ body {
 /* Card central do Login ampliado para 2 colunas */
 .card-login {
     width: 100%;
-    max-width: 750px; /* Expandido para acomodar o formulário e a imagem */
+    max-width: 866px; /* Expandido para acomodar o formulário e a imagem */
     background-color: #ffffff;
     border-radius: 12px;
     overflow: hidden;
@@ -79,7 +79,7 @@ body {
 
 .campo label {
     font-weight: bold;
-    font-size: 14px;
+    font-size: 18px;
     color: #000;
 }
 
@@ -88,7 +88,7 @@ body {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 18px;
     outline: none;
     width: 100%;
     box-sizing: border-box;
@@ -109,7 +109,7 @@ body {
     color: #ffffff;
     border: none;
     border-radius: 6px;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     margin-top: 8px;
@@ -134,7 +134,7 @@ body {
 .forgot-password {
     color: #708090;
     font-weight: bold;
-    font-size: 13px;
+    font-size: 18px;
     text-decoration: none;
 }
 

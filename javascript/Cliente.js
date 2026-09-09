@@ -28,7 +28,14 @@ function mostrarMensagem(texto, tipoMensagem) {
 }
 
 function textoTipo(valor) { 
-  return valor === 'F' ? 'Pessoa física' : valor === 'J' ? 'Pessoa jurídica' : 'Não informado'; 
+  if (!valor) return 'Não informado';
+  
+  const val = String(valor).trim().toUpperCase();
+
+  if (val === 'F' || val === 'PF' || val === 'FISICA') return 'Pessoa física';
+  if (val === 'J' || val === 'PJ' || val === 'JURIDICA') return 'Pessoa jurídica';
+  
+  return 'Não informado';
 }
 
 function formatarCpfCnpj(valor) {
@@ -53,7 +60,6 @@ async function carregarClientes(novoTermo = termoAtual) {
   tabela.innerHTML = '<tr><td colspan="6">Buscando clientes...</td></tr>';
   paginacao.hidden = true;
 
-  // Busca incluindo TELEFONE, EMAIL e ENDERECO
   let consulta = connSubaBase.from('CLIENTE')
     .select('CLIENTEID, TIPO_CLIENTE, CPF_CNPJ_CLIENTE, NOME_CLIENTE, TELEFONE, EMAIL, ENDERECO', { count: 'exact' });
 
@@ -91,26 +97,26 @@ async function carregarClientes(novoTermo = termoAtual) {
   data.forEach((cliente) => {
     const linha = document.createElement('tr');
 
-    // 1. CÓD.
-    const idCelula = document.createElement('td');
-    idCelula.textContent = cliente.CLIENTEID;
-
-    // 2. CLIENTE
+    // 1. CLIENTE
     const clienteCelula = document.createElement('td');
     clienteCelula.innerHTML = '<strong class="produto-nome"></strong>';
     clienteCelula.querySelector('.produto-nome').textContent = cliente.NOME_CLIENTE;
 
-    // 3. CPF / CNPJ
+    // 2. CPF / CNPJ
     const documento = document.createElement('td');
     documento.textContent = formatarCpfCnpj(cliente.CPF_CNPJ_CLIENTE);
 
-    // 4. TIPO
+    // 3. TIPO
     const tipoCelula = document.createElement('td');
     tipoCelula.textContent = textoTipo(cliente.TIPO_CLIENTE);
 
-    // 5. TELEFONE
+    // 4. TELEFONE
     const telefoneCelula = document.createElement('td');
     telefoneCelula.textContent = cliente.TELEFONE || '-';
+
+    // 5. E-MAIL
+    const emailCelula = document.createElement('td');
+    emailCelula.textContent = cliente.EMAIL || '-';
 
     // 6. AÇÕES
     const acoes = document.createElement('td');
@@ -133,8 +139,8 @@ async function carregarClientes(novoTermo = termoAtual) {
 
     acoes.append(editar, excluir);
 
-    // Anexando as 6 colunas na sequência exata da tabela
-    linha.append(idCelula, clienteCelula, documento, tipoCelula, telefoneCelula, acoes);
+    // Anexando as 6 colunas visíveis
+    linha.append(clienteCelula, documento, tipoCelula, telefoneCelula, emailCelula, acoes);
     tabela.appendChild(linha);
   });
 }
