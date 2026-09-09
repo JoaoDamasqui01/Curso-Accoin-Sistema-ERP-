@@ -7,62 +7,61 @@
     <title>DittoFlow - Painel Principal</title>
     <link rel="stylesheet" href="../style/universalStyle.css">
     <link rel="stylesheet" href="../style/homeStyle.css">
-  <script src="../componente/menu/menu.js" defer></script>
+    <script src="../componente/menu/menu.js" defer></script>
 </head>
 
 <body class="home-page">
     <menu-page></menu-page>
 
-    <main class="container home-container">
-        <section class="home-apresentacao" aria-labelledby="tituloPainel">
-            <div>
-                <p class="lista-produtos__eyebrow">Painel de gestão</p>
-                <h1 id="tituloPainel">Olá, seja bem-vindo!</h1>
-                <p class="home-apresentacao__texto">Acesse os cadastros e mantenha as informações da sua loja
-                    organizadas.</p>
-            </div>
-            <img src="../Imagem/dittoFlow.png" alt="Logo Accion" class="home-logo">
-        </section>
-
-        <section class="home-atalhos" aria-labelledby="tituloAtalhos">
-            <div class="home-secao-cabecalho">
+    <div class="main-wrapper">
+        <main class="container home-container">
+            <section class="home-apresentacao" aria-labelledby="tituloPainel">
                 <div>
-                    <p class="lista-produtos__eyebrow">Acesso rápido</p>
-                    <h2 id="tituloAtalhos">O que deseja gerenciar?</h2>
+                    <p class="lista-produtos__eyebrow">Painel de gestão</p>
+                    <h1 id="tituloPainel">Olá, seja bem-vindo!</h1>
+                    <p class="home-apresentacao__texto">Acesse os cadastros e mantenha as informações da sua loja organizadas.</p>
                 </div>
-            </div>
+                <img src="../Imagem/dittoFlow.png" alt="Logo Accion" class="home-logo">
+            </section>
 
-            <div class="home-cards">
-                <a class="home-card home-card--clientes" href="Cliente.html">
-                    <span class="home-card__icone" aria-hidden="true">C</span>
-                    <strong>Clientes</strong>
-                    <span>Cadastre e consulte clientes.</span>
-                </a>
-                <a class="home-card home-card--categorias" href="Categoria.html">
-                    <span class="home-card__icone" aria-hidden="true">K</span>
-                    <strong>Categorias</strong>
-                    <span>Organize os grupos de produtos.</span>
-                </a>
-                <a class="home-card home-card--produtos" href="Produto.html">
-                    <span class="home-card__icone" aria-hidden="true">P</span>
-                    <strong>Produtos</strong>
-                    <span>Gerencie catálogo e preços.</span>
-                </a>
-                <a class="home-card home-card--usuarios" href="Usuario.html">
-                    <span class="home-card__icone" aria-hidden="true">U</span>
-                    <strong>Usuários</strong>
-                    <span>Controle os acessos ao sistema.</span>
-                </a>
-                <a class="home-card home-card--vendas" href="Orcamento.html">
-                    <span class="home-card__icone" aria-hidden="true">PC</span>
-                    <strong>Proposta Comercial</strong>
-                    <span>Gerenciamento de Orçamento e Vendas.</span>
-                </a>
-            </div>
-        </section>
-    </main>
+            <section class="home-atalhos" aria-labelledby="tituloAtalhos">
+                <div class="home-secao-cabecalho">
+                    <div>
+                        <p class="lista-produtos__eyebrow">Acesso rápido</p>
+                        <h2 id="tituloAtalhos">O que deseja gerenciar?</h2>
+                    </div>
+                </div>
 
-    
+                <div class="home-cards">
+                    <a class="home-card home-card--clientes" href="Cliente.html">
+                        <span class="home-card__icone" aria-hidden="true">C</span>
+                        <strong>Clientes</strong>
+                        <span>Cadastre e consulte clientes.</span>
+                    </a>
+                    <a class="home-card home-card--categorias" href="Categoria.html">
+                        <span class="home-card__icone" aria-hidden="true">K</span>
+                        <strong>Categorias</strong>
+                        <span>Organize os grupos de produtos.</span>
+                    </a>
+                    <a class="home-card home-card--produtos" href="Produto.html">
+                        <span class="home-card__icone" aria-hidden="true">P</span>
+                        <strong>Produtos</strong>
+                        <span>Gerencie catálogo e preços.</span>
+                    </a>
+                    <a class="home-card home-card--usuarios" href="Usuario.html">
+                        <span class="home-card__icone" aria-hidden="true">U</span>
+                        <strong>Usuários</strong>
+                        <span>Controle os acessos ao sistema.</span>
+                    </a>
+                    <a class="home-card home-card--vendas" href="Orcamento.html">
+                        <span class="home-card__icone" aria-hidden="true">PC</span>
+                        <strong>Proposta Comercial</strong>
+                        <span>Gerenciamento de Orçamento e Vendas.</span>
+                    </a>
+                </div>
+            </section>
+        </main>
+    </div>
 </body>
 
 </html>

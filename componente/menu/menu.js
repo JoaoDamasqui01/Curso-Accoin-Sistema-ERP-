@@ -12,8 +12,8 @@ class MenuPage extends HTMLElement {
         }
 
         /* -------------------------------------------
-           1. ESTILOS DESKTOP (Padrão: Menu Fixo Lateral)
-           ------------------------------------------- */
+            1. ESTILOS DESKTOP (Padrão: Menu Fixo Lateral)
+            ------------------------------------------- */
         .btn-hamburguer {
           display: none; /* Escondido no Desktop */
         }
@@ -26,7 +26,7 @@ class MenuPage extends HTMLElement {
           position: fixed;
           top: 0;
           left: 0;
-          width: 316px;
+          width: 200px;
           height: 100vh;
           background-color: #172b3a;
           color: #ffffff;
@@ -54,7 +54,7 @@ class MenuPage extends HTMLElement {
         .header-brand {
           display: flex;
           align-items: center;
-          gap: 12px; /* Espaçamento entre a imagem e o texto */
+          gap: 12px;
         }
 
         .logo-menu-image {
@@ -65,7 +65,7 @@ class MenuPage extends HTMLElement {
 
         .menu-header h2 {
           margin: 0;
-          font-size: 20px;
+          font-size: 12px;
           color: #ffffff;
         }
 
@@ -73,6 +73,7 @@ class MenuPage extends HTMLElement {
         .menu-corpo {
           flex: 1;
           overflow-y: auto;
+          overflow-x: visible; 
           padding: 15px 0;
         }
 
@@ -85,19 +86,75 @@ class MenuPage extends HTMLElement {
           font-weight: bold;
         }
 
-        .menu-corpo a {
+        .menu-corpo a, .menu-dropdown-toggle {
           display: flex;
           align-items: center;
+          width: 100%;
           padding: 12px 20px;
           color: #e2e8f0;
           text-decoration: none;
-          font-size: 20px;
+          font-size: 14px;
+          background: none;
+          border: none;
+          text-align: left;
+          font-family: inherit;
+          cursor: pointer;
           transition: background-color 0.2s, color 0.2s;
         }
 
-        .menu-corpo a:hover {
+        .menu-corpo a:hover, .menu-dropdown-toggle:hover {
           background-color: rgba(255, 255, 255, 0.08);
           color: #b7d63a;
+        }
+
+        /* -------------------------------------------
+            ESTILOS DO DROPDOWN LATERAL (Flyout)
+            ------------------------------------------- */
+        .menu-item-dropdown {
+          position: relative; 
+        }
+
+        .menu-seta {
+          margin-left: auto;
+          font-size: 10px;
+          transition: transform 0.2s ease;
+        }
+
+        /* Submenu corrigido para colar perfeitamente na borda direita do menu fixo (200px) */
+        .submenu-lateral {
+          display: none; /* Oculto por padrão */
+          position: fixed; /* Fixado em relação à tela/aside principal */
+          top: 210px;      /* Alinhado verticalmente na altura aproximada do botão Catálogo */
+          left: 200px;     /* Largura exata da barra .menu-lateral, grudando na borda externa */
+          min-width: 170px;
+          background-color: #1e293b;
+          border-radius: 6px;
+          box-shadow: 4px 10px 15px -3px rgba(0, 0, 0, 0.4);
+          list-style: none;
+          padding: 6px 0;
+          z-index: 1100;
+        }
+
+        .submenu-lateral li a {
+          padding: 10px 16px;
+          font-size: 13px;
+          color: #e2e8f0;
+        }
+
+        .submenu-lateral li a:hover {
+          background-color: rgba(255, 255, 255, 0.08);
+          color: #ffffff;
+        }
+
+        /* Ativação do dropdown por hover no desktop ou classe JS */
+        .menu-item-dropdown:hover .submenu-lateral,
+        .menu-item-dropdown.ativo .submenu-lateral {
+          display: block;
+        }
+
+        .menu-item-dropdown:hover .menu-seta,
+        .menu-item-dropdown.ativo .menu-seta {
+          transform: rotate(90deg);
         }
 
         /* Rodapé Fixado no Fim */
@@ -126,10 +183,9 @@ class MenuPage extends HTMLElement {
         }
 
         /* -------------------------------------------
-           2. ESTILOS MOBILE (Telas menores que 768px)
-           ------------------------------------------- */
-        @media (max-width: 7680px) {
-          /* Botão Hambúrguer Fixo */
+            2. ESTILOS MOBILE (Telas menores que 1366px)
+            ------------------------------------------- */
+       @media (max-width: 1366px) {
           .btn-hamburguer {
             display: flex;
             position: fixed;
@@ -153,7 +209,6 @@ class MenuPage extends HTMLElement {
             background-color: #243746;
           }
 
-          /* Overlay para fechar ao clicar fora */
           .menu-overlay {
             display: block;
             position: fixed;
@@ -173,7 +228,6 @@ class MenuPage extends HTMLElement {
             visibility: visible;
           }
 
-          /* Menu Recuado (Offcanvas) no Mobile */
           .menu-lateral {
             left: -316px;
             width: 316px;
@@ -185,7 +239,6 @@ class MenuPage extends HTMLElement {
             left: 0;
           }
 
-          /* Exibe o botão de fechar 'X' apenas no Mobile */
           .btn-fechar {
             display: block;
             background: none;
@@ -198,6 +251,16 @@ class MenuPage extends HTMLElement {
 
           .btn-fechar:hover {
             color: #ffffff;
+          }
+
+          /* No mobile, o submenu volta a ser estático (acordeão abaixo do botão) */
+          .submenu-lateral {
+            position: static;
+            box-shadow: none;
+            background-color: rgba(0, 0, 0, 0.15);
+            margin-left: 0;
+            top: auto;
+            left: auto;
           }
         }
       </style>
@@ -222,10 +285,19 @@ class MenuPage extends HTMLElement {
           <a href="Home.html">📌 Painel Principal</a>
 
           <div class="secao-titulo">Cadastros</div>
-          
           <a href="Cliente.html">👥 Clientes</a>
-          <a href="Categoria.html">🏷️ Categorias</a>
-          <a href="Produto.html">🎨 Produtos</a>
+
+          <!-- Item com Dropdown Lateral (Catálogo) -->
+          <div class="menu-item-dropdown" id="dropdownCatalogo">
+            <button type="button" class="menu-dropdown-toggle" aria-expanded="false">
+              <span>📦 Catálogo</span>
+              <span class="menu-seta" aria-hidden="true">▶</span>
+            </button>
+            <ul class="submenu-lateral">
+              <li><a href="Produto.html">🎨 Produtos</a></li>
+              <li><a href="Categoria.html">🏷️ Categorias</a></li>
+            </ul>
+          </div>
 
           <div class="secao-titulo">Manutenção</div>
           <a href="Usuario.html">⚙️ Usuários</a>
@@ -240,12 +312,12 @@ class MenuPage extends HTMLElement {
       </aside>
     `;
 
-    // Lógica de abertura e fechamento
     const sidebar = shadowDOM.getElementById('sidebar');
     const overlay = shadowDOM.getElementById('overlay');
     const btnToggle = shadowDOM.getElementById('btnToggle');
     const btnFechar = shadowDOM.getElementById('btnFechar');
-    const btnSair = shadowDOM.getElementById('btnSair'); // <-- Seleciona o botão Sair
+    const btnSair = shadowDOM.getElementById('btnSair');
+    const dropdownCatalogo = shadowDOM.getElementById('dropdownCatalogo');
 
     const toggleMenu = () => {
       sidebar.classList.toggle('aberto');
@@ -256,16 +328,19 @@ class MenuPage extends HTMLElement {
     btnFechar.addEventListener('click', toggleMenu);
     overlay.addEventListener('click', toggleMenu);
 
-    // --- LÓGICA DE SAIR DA SESSÃO ---
-    btnSair.addEventListener('click', (event) => {
-      event.preventDefault(); // Impede a navegação simples do link <a>
+    const dropdownToggleBtn = dropdownCatalogo.querySelector('.menu-dropdown-toggle');
+    dropdownToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownCatalogo.classList.toggle('ativo');
+      const isOpen = dropdownCatalogo.classList.contains('ativo');
+      dropdownToggleBtn.setAttribute('aria-expanded', isOpen);
+    });
 
-      // 1. Destrói a sessão armazenada
+    btnSair.addEventListener('click', (event) => {
+      event.preventDefault();
       sessionStorage.removeItem('usuarioLogado');
       sessionStorage.clear();
       localStorage.clear();
-
-      // 2. Redireciona para o login substituindo a página atual no histórico
       window.location.replace('Login.html');
     });
   }

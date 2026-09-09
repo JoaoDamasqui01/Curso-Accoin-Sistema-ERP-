@@ -79,7 +79,7 @@ body {
 
 .campo label {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 14px;
     color: #000;
 }
 
@@ -88,7 +88,7 @@ body {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 18px;
+    font-size: 14px;
     outline: none;
     width: 100%;
     box-sizing: border-box;
@@ -109,7 +109,7 @@ body {
     color: #ffffff;
     border: none;
     border-radius: 6px;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
     margin-top: 8px;
@@ -134,7 +134,7 @@ body {
 .forgot-password {
     color: #708090;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 14px;
     text-decoration: none;
 }
 

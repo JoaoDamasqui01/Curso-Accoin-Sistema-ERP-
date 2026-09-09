@@ -21,23 +21,36 @@ body {
     color: var(--texto);
     background: linear-gradient(135deg, #172b3a 0%, #284c63 52%, #70a42f 160%);
     display: flex;
-    flex-direction: column;
-    gap: 63px;
+    flex-direction: row; /* Alinha o menu lateral e o conteúdo lado a lado no desktop */
 }
 
+/* O componente do menu lateral */
 menu-page {
-    display: block;
-    margin: 0px 0px 0px;
+    display: flex;
+    flex-shrink: 0;
+    z-index: 1000;
 }
 
+/* Container Principal do Formulário / Conteúdo */
 .container {
     width: min(1180px, 100%);
-    margin: 0 auto;
+    margin: 40px auto;
     padding: clamp(24px, 4vw, 42px);
-    background: #fff;
+    background: #F7FBFF;
     border: 1px solid rgba(255, 255, 255, .4);
     border-radius: 18px;
     box-shadow: 0 22px 55px rgba(4, 20, 31, .28);
+}
+
+/* Wrapper geral para empurrar o conteúdo para o lado do menu fixo */
+.main-wrapper {
+    flex: 1;
+    margin-left: 220px; /* Espaço exato do menu lateral fixo */
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
 }
 
 .pagina-cabecalho {
@@ -221,7 +234,7 @@ button:active {
 }
 
 .btn-impprimir {
-    background-color: var(--roxo) ;
+    background-color: var(--roxo);
     color: #ffff
 }
 
@@ -292,7 +305,6 @@ td button {
     font-size: .78rem;
 }
 
-/* Lista de produtos: agrupamento, hierarquia e contraste para leitura rápida. */
 .lista-produtos {
     margin-top: 42px;
     overflow: hidden;
@@ -650,21 +662,43 @@ td button {
     color: #b12632;
 }
 
-@media (max-width: 850px) {
+/* =========================================================
+   RESPONSIVIDADE PARA NOTEBOOKS (Abaixo de 1366px)
+   ========================================================= */
+@media (max-width: 1366px) {
     body {
+        flex-direction: column; /* Empilha o menu no topo via hambúrguer */
+    }
+
+    .main-wrapper {
+        margin-left: 0; /* Remove a margem lateral quando o menu vira gaveta */
         padding: 20px;
+        padding-top: 80px; /* Espaço para o botão hambúrguer flutuante */
     }
 
     .form-cliente {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    .orcamento-adicionar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* =========================================================
+   RESPONSIVIDADE PARA TABLETS E CELULARES (Abaixo de 850px / 580px)
+   ========================================================= */
+@media (max-width: 850px) {
+    .form-cliente {
+        grid-template-columns: 1fr;
+    }
+
     .container {
-        padding: 26px;
+        padding: 22px;
     }
 
     .orcamento-adicionar {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: 1fr;
     }
 
     .lista-produtos__cabecalho {
@@ -682,12 +716,13 @@ td button {
 }
 
 @media (max-width: 580px) {
-    body {
+    .main-wrapper {
         padding: 12px;
+        padding-top: 75px;
     }
 
     .container {
-        padding: 20px;
+        padding: 16px;
         border-radius: 13px;
     }
 
@@ -698,19 +733,6 @@ td button {
 
     .pagina-cabecalho .btn-pesquisar {
         width: 100%;
-    }
-
-    .form-cliente {
-        grid-template-columns: 1fr;
-    }
-
-    .orcamento-adicionar {
-        grid-template-columns: 1fr;
-        padding: 18px;
-    }
-
-    .orcamento-itens__cabecalho {
-        padding: 18px;
     }
 
     .campo.nome,
