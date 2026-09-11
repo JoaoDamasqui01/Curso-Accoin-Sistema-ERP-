@@ -383,7 +383,7 @@ async function excluirProduto(item) {
     .eq("PRODUTOID", item.PRODUTOID);
 
   if (error) {
-    mostrarMensagem("Erro ao excluir produto: " + error.message, "erro");
+    mostrarMensagem("Erro ao excluir produto: está vinculado a um orçamento existente", "erro");
     return;
   }
 

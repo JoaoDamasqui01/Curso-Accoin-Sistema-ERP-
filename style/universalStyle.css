@@ -19,7 +19,7 @@ body {
     margin: 0;
     font-family: 'Inter', Arial, sans-serif;
     color: var(--texto);
-    background: linear-gradient(135deg, #172b3a 0%, #284c63 52%, #70a42f 160%);
+    background: linear-gradient(135deg, #3c5b73 0%, #284c63 52%, #70a42f 160%);
     display: flex;
     flex-direction: row;
     /* Alinha o menu lateral e o conteúdo lado a lado no desktop */
@@ -267,22 +267,36 @@ button:active {
 }
 
 .mensagem {
-    min-height: 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: auto;
     margin: 18px 0 0;
-    font-size: .9rem;
+    padding: 10px 16px;
+    font-size: .88rem;
     font-weight: 600;
+    border-radius: 10px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .sucesso {
     color: #39EB7E;
+    background-color: rgba(40, 116, 69, 0.45); /* Fundo opaco esverdeado */
+    border-color: rgba(57, 235, 126, 0.3);
 }
 
 .erro {
-    color: #f43343;
+    color: #ff6b7b;
+    background-color: rgba(148, 38, 48, 0.45); /* Fundo opaco avermelhado */
+    border-color: rgba(244, 51, 67, 0.3);
 }
 
-.edicao{
-    color: #E65100;
+.edicao {
+    color: #ffb74d;
+    background-color: rgba(153, 77, 0, 0.45); /* Fundo opaco alaranjado/âmbar */
+    border-color: rgba(230, 81, 0, 0.3);
 }
 
 table {
